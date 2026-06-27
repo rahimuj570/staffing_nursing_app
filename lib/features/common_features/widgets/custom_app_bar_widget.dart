@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:staffing/app/constants/app_assets.dart';
+import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/features/common_features/views/notification_view.dart';
 
 class CustomAppBarWidget extends StatelessWidget
     implements PreferredSizeWidget {
@@ -25,7 +27,9 @@ class CustomAppBarWidget extends StatelessWidget
           const Spacer(),
           IconButton(
             icon: Icon(Icons.notifications_none_rounded, size: 26.r),
-            onPressed: () {},
+            onPressed: () {
+              context.push(NotificationView());
+            },
           ),
         ],
       ),
