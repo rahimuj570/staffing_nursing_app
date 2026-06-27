@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:staffing/app/constants/app_assets.dart';
+import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/features/common_features/views/notification_view.dart';
 
@@ -22,6 +23,7 @@ class CustomAppBarWidget extends StatelessWidget
                   style: TextStyle(
                     fontSize: 24.sp,
                     fontWeight: FontWeight.w700,
+                    color: AppColors.themeColorLight,
                   ),
                 ),
           const Spacer(),

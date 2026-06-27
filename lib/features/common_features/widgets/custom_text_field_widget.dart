@@ -7,6 +7,7 @@ Widget customTextFieldWidget({
   required TextEditingController controller,
   required TextInputType textInputType,
   required String placeHolder,
+  bool readOnly = false,
   bool obscureText = false,
   IconData? suffixIcon,
   IconData? prefixIcon,
@@ -28,6 +29,7 @@ Widget customTextFieldWidget({
         ),
       if (label.isNotEmpty) SizedBox(height: 4.h),
       TextFormField(
+        readOnly: readOnly,
         obscureText: obscureText,
         keyboardType: .emailAddress,
         validator: validator,
