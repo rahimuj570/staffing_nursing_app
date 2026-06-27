@@ -4,6 +4,7 @@ import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/features/common_features/views/shift_details_view.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_text_field_widget.dart';
 import 'package:staffing/features/common_features/widgets/shift_card_widget.dart';
@@ -57,14 +58,17 @@ class ShiftView extends StatelessWidget {
               child: ListView.separated(
                 separatorBuilder: (context, index) => SizedBox(height: 10.h),
                 itemCount: 10,
-                itemBuilder: (context, index) => ShiftCardWidget(
-                  title: 'Sunrise Care Center',
-                  location: 'Atlanta, GA',
-                  date: 'May 20, 2026',
-                  time: '7:00 AM - 3:00 PM',
-                  status: 'RN',
-                  ratePerHour: '58',
-                  image: AppAssets.hospitalImage,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () => context.push(ShiftDetailsView()),
+                  child: ShiftCardWidget(
+                    title: 'Sunrise Care Center',
+                    location: 'Atlanta, GA',
+                    date: 'May 20, 2026',
+                    time: '7:00 AM - 3:00 PM',
+                    status: 'RN',
+                    ratePerHour: '58',
+                    image: AppAssets.hospitalImage,
+                  ),
                 ),
               ),
             ),

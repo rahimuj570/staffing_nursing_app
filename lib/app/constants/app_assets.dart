@@ -6,4 +6,5 @@ class AppAssets {
   static const String appBarLogo = 'assets/images/appbar_logo.png';
   static const String nurseDp = 'assets/images/nurse_dp.png';
   static const String hospitalImage = 'assets/images/hospital_image.png';
+  static const String demoMap = 'assets/images/demo_map.png';
 }
