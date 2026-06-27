@@ -3,4 +3,5 @@ class AppAssets {
   static const String logoTransparemt = 'assets/images/logo_transparent.png';
   static const String getStartedHero = 'assets/images/get_started_hero.png';
   static const String sandTime = 'assets/images/sand_time.png';
+  static const String appBarLogo = 'assets/images/appbar_logo.png';
 }

@@ -39,6 +39,7 @@ dependencies:
   provider: ^6.1.5+1
   pinput: ^6.0.2
   file_picker: ^11.0.2
+  remixicon: ^4.9.3
 
 dev_dependencies:
   flutter_test:

@@ -9,6 +9,7 @@ import 'package:staffing/features/auth_features/view_models/login_view_model.dar
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_text_field_widget.dart';
 import 'package:staffing/features/forgot_password_features/views/forgot_password_view.dart';
+import 'package:staffing/features/home_main_nav_holder_features/views/home_main_nav_holder_view.dart';
 import 'package:staffing/features/register_features/views/register_view.dart';
 
 class LoginViews extends StatelessWidget {
@@ -77,7 +78,9 @@ class LoginViews extends StatelessWidget {
                         SizedBox(height: 40.h),
                         customElevatedButtonWidget(
                           text: 'Login',
-                          onTapped: () {},
+                          onTapped: () {
+                            context.push(HomeMainNavHolderView());
+                          },
                         ),
                         SizedBox(height: 16.h),
                         RichText(
