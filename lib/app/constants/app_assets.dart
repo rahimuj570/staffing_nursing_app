@@ -4,4 +4,6 @@ class AppAssets {
   static const String getStartedHero = 'assets/images/get_started_hero.png';
   static const String sandTime = 'assets/images/sand_time.png';
   static const String appBarLogo = 'assets/images/appbar_logo.png';
+  static const String nurseDp = 'assets/images/nurse_dp.png';
+  static const String hospitalImage = 'assets/images/hospital_image.png';
 }
