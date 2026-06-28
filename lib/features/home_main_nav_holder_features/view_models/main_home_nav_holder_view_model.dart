@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:staffing/features/home_features/views/home_view.dart';
+import 'package:staffing/features/message_features/views/message_view.dart';
 import 'package:staffing/features/schedule_features/views/schedule_view.dart';
 import 'package:staffing/features/shift_features/views/shift_view.dart';
 
@@ -20,7 +21,7 @@ class MainHomeNavHolderViewModel extends ChangeNotifier {
       case 2:
         return ScheduleView();
       case 3:
-        return const Placeholder();
+        return MessageView();
       case 4:
         return const Placeholder();
       default:
