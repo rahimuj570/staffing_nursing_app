@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/features/common_features/views/shift_details_view.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
-import 'package:staffing/features/shift_features/views/shift_accepted_successfull_view.dart';
+import 'package:staffing/features/home_main_nav_holder_features/view_models/main_home_nav_holder_view_model.dart';
+import 'package:staffing/features/home_main_nav_holder_features/views/home_main_nav_holder_view.dart';
+import 'package:staffing/features/schedule_features/views/schedule_view.dart';
 
-class ShiftConfirmationView extends StatelessWidget {
-  const ShiftConfirmationView({super.key});
+class ShiftAcceptedSuccessfullView extends StatelessWidget {
+  const ShiftAcceptedSuccessfullView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Shift Confirmation')),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
             padding: .symmetric(horizontal: 20.w),
             child: Column(
               children: [
-                SizedBox(height: 84.h),
+                SizedBox(height: 148.h),
                 Container(
                   height: 100.h,
                   width: 100.w,
@@ -29,14 +32,14 @@ class ShiftConfirmationView extends StatelessWidget {
                     border: .all(color: AppColors.themeColorLight, width: 2),
                   ),
                   child: Icon(
-                    Icons.question_mark_outlined,
+                    Icons.done,
                     size: 50.r,
                     color: AppColors.themeColorLight,
                   ),
                 ),
                 SizedBox(height: 20.h),
                 Text(
-                  'Confirm Shift Pickup',
+                  'Shift Accepted Successfully',
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: .w700,
@@ -45,7 +48,7 @@ class ShiftConfirmationView extends StatelessWidget {
                 ),
                 SizedBox(height: 8.h),
                 Text(
-                  'Are you sure you want to accept this shift?',
+                  'You have successfully accepted this shift.',
                   style: TextStyle(fontSize: 14.sp, fontWeight: .w400),
                 ),
                 SizedBox(height: 20.h),
@@ -106,9 +109,9 @@ class ShiftConfirmationView extends StatelessWidget {
             mainAxisSize: .min,
             children: [
               customElevatedButtonWidget(
-                text: 'Confirm Shift',
+                text: 'View Schedule',
                 onTapped: () {
-                  context.pushRemoveUntil(ShiftAcceptedSuccessfullView());
+                  context.pushRemoveUntil(ScheduleView());
                 },
               ),
               SizedBox(height: 16.h),
@@ -116,9 +119,10 @@ class ShiftConfirmationView extends StatelessWidget {
                 borderColor: AppColors.themeColor,
                 backgroundColor: Colors.white,
                 forgroundColor: AppColors.themeColor,
-                text: 'Cancel',
+                text: 'Find More Shifts',
                 onTapped: () {
-                  context.pop();
+                  context.read<MainHomeNavHolderViewModel>().changeIndex(1);
+                  context.pushRemoveUntil(HomeMainNavHolderView());
                 },
               ),
             ],
