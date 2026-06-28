@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:staffing/features/home_features/views/home_view.dart';
 import 'package:staffing/features/message_features/views/message_view.dart';
+import 'package:staffing/features/my_profile_features/views/my_profile_view.dart';
 import 'package:staffing/features/schedule_features/views/schedule_view.dart';
 import 'package:staffing/features/shift_features/views/shift_view.dart';
 
@@ -23,9 +24,9 @@ class MainHomeNavHolderViewModel extends ChangeNotifier {
       case 3:
         return MessageView();
       case 4:
-        return const Placeholder();
+        return MyProfileView();
       default:
-        return const Placeholder();
+        return const Center(child: Text('No Screen'));
     }
   }
 }
