@@ -5,6 +5,7 @@ import 'package:staffing/app/constants/app_colors.dart';
 class AppTheme {
   static ThemeData lightTheme() {
     return ThemeData(
+      // fontFamily: 'MyCustomFont',
       colorSchemeSeed: AppColors.themeColor,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: AppColors.themeColor,
