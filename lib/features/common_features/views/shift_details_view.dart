@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/common_features/widgets/read_more_text_widget.dart';
+import 'package:staffing/features/schedule_features/view_models/schedule_view_model.dart';
 import 'package:staffing/features/shift_features/views/shift_confirmation_view.dart';
 
 class ShiftDetailsView extends StatelessWidget {
-  const ShiftDetailsView({super.key});
+  final bool isScheduleDetails;
+  const ShiftDetailsView({super.key, this.isScheduleDetails = false});
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +103,7 @@ class ShiftDetailsView extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 child: Text(
-                                  'Day',
+                                  'Days',
                                   style: TextStyle(
                                     fontSize: 12.sp,
                                     fontWeight: .w400,
@@ -296,32 +299,62 @@ class ShiftDetailsView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 32.h),
-                Row(
-                  children: [
-                    Container(
-                      width: 48.w,
-                      height: 48.h,
-                      decoration: BoxDecoration(
-                        borderRadius: .circular(12.r),
-                        border: .all(color: AppColors.themeColor),
+                if (isScheduleDetails == false)
+                  Row(
+                    children: [
+                      Container(
+                        width: 48.w,
+                        height: 48.h,
+                        decoration: BoxDecoration(
+                          borderRadius: .circular(12.r),
+                          border: .all(color: AppColors.themeColor),
+                        ),
+                        child: Icon(
+                          Icons.favorite_border_rounded,
+                          color: AppColors.themeColor,
+                          size: 26.r,
+                        ),
                       ),
-                      child: Icon(
-                        Icons.favorite_border_rounded,
-                        color: AppColors.themeColor,
-                        size: 26.r,
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: customElevatedButtonWidget(
+                          text: 'I want this Shift',
+                          onTapped: () {
+                            context.push(ShiftConfirmationView());
+                          },
+                        ),
                       ),
+                    ],
+                  ),
+
+                if (isScheduleDetails == true)
+                  Consumer<ScheduleViewModel>(
+                    builder: (context, provider, child) => Column(
+                      children: [
+                        customElevatedButtonWidget(
+                          icon: Icons.watch_later_outlined,
+                          text: provider.isClockIn == true
+                              ? 'Clock Out'
+                              : 'Clock In',
+                          onTapped: () {
+                            provider.changeClockIn();
+                          },
+                        ),
+                        SizedBox(height: 12.h),
+                        customElevatedButtonWidget(
+                          icon: Icons.email_outlined,
+                          backgroundColor: Colors.white,
+                          forgroundColor: AppColors.themeColor,
+                          borderColor: AppColors.themeColor,
+                          text: 'Message',
+                          onTapped: () {
+                            context.push(ShiftConfirmationView());
+                          },
+                        ),
+                        SizedBox(height: 8.h),
+                      ],
                     ),
-                    SizedBox(width: 8.w),
-                    Expanded(
-                      child: customElevatedButtonWidget(
-                        text: 'I want this Shift',
-                        onTapped: () {
-                          context.push(ShiftConfirmationView());
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
               ],
             ),
           ),

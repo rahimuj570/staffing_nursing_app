@@ -8,6 +8,7 @@ Widget customElevatedButtonWidget({
   Color? backgroundColor,
   Color? forgroundColor,
   Color? borderColor,
+  IconData? icon,
 }) {
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
@@ -20,9 +21,17 @@ Widget customElevatedButtonWidget({
       ),
     ),
     onPressed: onTapped,
-    child: Text(
-      text,
-      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+    child: Row(
+      mainAxisAlignment: .center,
+      spacing: 6.w,
+      children: [
+        if (icon != null)
+          Icon(icon, size: 20.r, color: forgroundColor ?? Colors.white),
+        Text(
+          text,
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+        ),
+      ],
     ),
   );
 }

@@ -55,21 +55,26 @@ class ShiftCardWidget extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 8.w),
-                      Container(
-                        padding: .all(5.r),
-                        decoration: BoxDecoration(
-                          color: AppColors.greyLight,
-                          borderRadius: BorderRadius.circular(21.r),
-                        ),
-                        child: Text(
-                          status,
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            fontWeight: .w400,
-                            color: AppColors.themeColorLight,
+                      if (status.isNotEmpty)
+                        Container(
+                          padding: .symmetric(horizontal: 5.w, vertical: 2.h),
+                          decoration: BoxDecoration(
+                            color: status == 'Cancelled'
+                                ? Colors.red.shade100
+                                : AppColors.greyLight,
+                            borderRadius: BorderRadius.circular(21.r),
+                          ),
+                          child: Text(
+                            status,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: .w400,
+                              color: status == 'Cancelled'
+                                  ? Colors.red
+                                  : AppColors.themeColorLight,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                   SizedBox(height: 8.h),

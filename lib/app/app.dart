@@ -6,6 +6,7 @@ import 'package:staffing/features/auth_features/view_models/login_view_model.dar
 import 'package:staffing/features/forgot_password_features/view_models/forgot_password_view_model.dart';
 import 'package:staffing/features/home_main_nav_holder_features/view_models/main_home_nav_holder_view_model.dart';
 import 'package:staffing/features/register_features/view_models/register_view_model.dart';
+import 'package:staffing/features/schedule_features/view_models/schedule_view_model.dart';
 import 'package:staffing/features/welcome_features/views/splash_view.dart';
 
 class MainAppScreen extends StatelessWidget {
@@ -19,6 +20,7 @@ class MainAppScreen extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ForgotPasswordViewModel()),
         ChangeNotifierProvider(create: (_) => RegisterViewModel()),
         ChangeNotifierProvider(create: (_) => MainHomeNavHolderViewModel()),
+        ChangeNotifierProvider(create: (_) => ScheduleViewModel()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(402, 874),
