@@ -283,7 +283,7 @@ class MyProfileView extends StatelessWidget {
                       ),
                       MytProfileMenuWidget(
                         icon: RemixIcons.logout_box_r_line,
-                        title: 'log out',
+                        title: 'Logout',
                         onTap: () {
                           showModalBottomSheet(
                             context: context,
