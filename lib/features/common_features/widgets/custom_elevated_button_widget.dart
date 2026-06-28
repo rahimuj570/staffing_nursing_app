@@ -7,13 +7,17 @@ Widget customElevatedButtonWidget({
   required VoidCallback? onTapped,
   Color? backgroundColor,
   Color? forgroundColor,
+  Color? borderColor,
 }) {
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
       backgroundColor: backgroundColor ?? AppColors.themeColor,
       foregroundColor: forgroundColor ?? Colors.white,
       minimumSize: Size(double.infinity, 48.h),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.r),
+        side: BorderSide(color: borderColor ?? Colors.transparent),
+      ),
     ),
     onPressed: onTapped,
     child: Text(
