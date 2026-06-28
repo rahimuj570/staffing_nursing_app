@@ -165,7 +165,7 @@ class HomeView extends StatelessWidget {
                 'Your Next Shift',
                 style: TextStyle(fontSize: 16.sp, fontWeight: .w500),
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 8.h),
               ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -179,7 +179,7 @@ class HomeView extends StatelessWidget {
                 'At a Glance',
                 style: TextStyle(fontSize: 16.sp, fontWeight: .w500),
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 8.h),
               GridView.custom(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
