@@ -31,13 +31,16 @@ class NextShiftCardWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: .start,
                 children: [
-                  Wrap(
+                  Row(
+                    mainAxisAlignment: .spaceBetween,
                     children: [
-                      Text(
-                        'Sunrise Care Centersss',
-                        style: TextStyle(fontSize: 14.sp, fontWeight: .w700),
+                      Expanded(
+                        child: Text(
+                          'Sunrise Care Centersss',
+                          style: TextStyle(fontSize: 14.sp, fontWeight: .w700),
+                        ),
                       ),
-                      SizedBox(width: 8.w),
+
                       Container(
                         padding: .all(4.r),
                         decoration: BoxDecoration(

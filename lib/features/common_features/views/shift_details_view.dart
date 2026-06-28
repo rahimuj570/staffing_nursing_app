@@ -7,6 +7,7 @@ import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/common_features/widgets/read_more_text_widget.dart';
+import 'package:staffing/features/message_features/views/chat_view.dart';
 import 'package:staffing/features/schedule_features/view_models/schedule_view_model.dart';
 import 'package:staffing/features/shift_features/views/shift_confirmation_view.dart';
 
@@ -348,7 +349,7 @@ class ShiftDetailsView extends StatelessWidget {
                           borderColor: AppColors.themeColor,
                           text: 'Message',
                           onTapped: () {
-                            context.push(ShiftConfirmationView());
+                            context.push(ChatView());
                           },
                         ),
                         SizedBox(height: 8.h),

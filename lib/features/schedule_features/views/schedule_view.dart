@@ -24,7 +24,10 @@ class _ScheduleViewState extends State<ScheduleView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<ScheduleViewModel>().changeTabIndex(0);
+    });
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
   }
 
   @override

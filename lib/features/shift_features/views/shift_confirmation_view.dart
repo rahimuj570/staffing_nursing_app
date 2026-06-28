@@ -108,7 +108,7 @@ class ShiftConfirmationView extends StatelessWidget {
               customElevatedButtonWidget(
                 text: 'Confirm Shift',
                 onTapped: () {
-                  context.pushRemoveUntil(ShiftAcceptedSuccessfullView());
+                  context.pushReplacement(ShiftAcceptedSuccessfullView());
                 },
               ),
               SizedBox(height: 16.h),

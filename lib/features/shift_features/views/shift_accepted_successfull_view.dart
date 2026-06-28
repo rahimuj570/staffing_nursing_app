@@ -111,7 +111,8 @@ class ShiftAcceptedSuccessfullView extends StatelessWidget {
               customElevatedButtonWidget(
                 text: 'View Schedule',
                 onTapped: () {
-                  context.pushRemoveUntil(ScheduleView());
+                  context.read<MainHomeNavHolderViewModel>().changeIndex(2);
+                  context.pushRemoveUntil(HomeMainNavHolderView());
                 },
               ),
               SizedBox(height: 16.h),
