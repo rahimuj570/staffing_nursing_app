@@ -66,15 +66,6 @@ class ForgotPasswordResetPasswordView extends StatelessWidget {
                         context.push(LoginViews());
                       },
                     ),
-
-                    SizedBox(height: 130.h),
-                    Align(
-                      alignment: .centerEnd,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text('Social Security Number'),
-                      ),
-                    ),
                   ],
                 ),
               ),
