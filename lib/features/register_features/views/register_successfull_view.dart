@@ -17,8 +17,10 @@ class RegisterSuccessfullView extends StatelessWidget {
               crossAxisAlignment: .start,
               children: [
                 SizedBox(height: 16.h),
-                Center(child: Image.asset(AppAssets.logoTransparemt)),
-                SizedBox(height: 46.h),
+                Center(
+                  child: Image.asset(AppAssets.logoTransparemt, width: 182.w),
+                ),
+                SizedBox(height: 58.h),
                 Center(child: Image.asset(AppAssets.sandTime)),
                 SizedBox(height: 10.h),
                 Text(

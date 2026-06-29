@@ -84,22 +84,25 @@ class _ScheduleViewState extends State<ScheduleView>
               Expanded(
                 child: ListView.separated(
                   separatorBuilder: (context, index) => SizedBox(height: 8.h),
-                  itemCount: 5,
-                  itemBuilder: (context, index) => GestureDetector(
-                    onTap: () =>
-                        context.push(ShiftDetailsView(isScheduleDetails: true)),
-                    child: ShiftCardWidget(
-                      title: 'Sunrise Care Center',
-                      location: 'Atlanta, GA',
-                      date: 'May 20, 2026',
-                      time: '7:00 AM - 3:00 PM',
-                      status: provider.getStatus() == 'Upcoming'
-                          ? ''
-                          : provider.getStatus(),
-                      ratePerHour: '\$58/hr',
-                      image: AppAssets.hospitalImage,
-                    ),
-                  ),
+                  itemCount: 5 + 1,
+                  itemBuilder: (context, index) => index == 5
+                      ? SizedBox(height: 20.h)
+                      : GestureDetector(
+                          onTap: () => context.push(
+                            ShiftDetailsView(isScheduleDetails: true),
+                          ),
+                          child: ShiftCardWidget(
+                            title: 'Sunrise Care Center',
+                            location: 'Atlanta, GA',
+                            date: 'May 20, 2026',
+                            time: '7:00 AM - 3:00 PM',
+                            status: provider.getStatus() == 'Upcoming'
+                                ? ''
+                                : provider.getStatus(),
+                            ratePerHour: '\$58/hr',
+                            image: AppAssets.hospitalImage,
+                          ),
+                        ),
                 ),
               ),
             ],

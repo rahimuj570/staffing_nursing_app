@@ -96,7 +96,7 @@ class ChatView extends StatelessWidget {
       bottomNavigationBar: SafeArea(
         top: false,
         child: Padding(
-          padding: .symmetric(horizontal: 20.w),
+          padding: .only(right: 20.w, left: 20.w, bottom: 10.h),
           child: Row(
             children: [
               Expanded(

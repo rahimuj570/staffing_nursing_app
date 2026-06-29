@@ -57,19 +57,21 @@ class ShiftView extends StatelessWidget {
             Expanded(
               child: ListView.separated(
                 separatorBuilder: (context, index) => SizedBox(height: 10.h),
-                itemCount: 10,
-                itemBuilder: (context, index) => GestureDetector(
-                  onTap: () => context.push(ShiftDetailsView()),
-                  child: ShiftCardWidget(
-                    title: 'Sunrise Care Center',
-                    location: 'Atlanta, GA',
-                    date: 'May 20, 2026',
-                    time: '7:00 AM - 3:00 PM',
-                    status: 'RN',
-                    ratePerHour: '58',
-                    image: AppAssets.hospitalImage,
-                  ),
-                ),
+                itemCount: 10 + 1,
+                itemBuilder: (context, index) => index == 10
+                    ? Center(child: SizedBox(height: 20.h))
+                    : GestureDetector(
+                        onTap: () => context.push(ShiftDetailsView()),
+                        child: ShiftCardWidget(
+                          title: 'Sunrise Care Center',
+                          location: 'Atlanta, GA',
+                          date: 'May 20, 2026',
+                          time: '7:00 AM - 3:00 PM',
+                          status: 'RN',
+                          ratePerHour: '58',
+                          image: AppAssets.hospitalImage,
+                        ),
+                      ),
               ),
             ),
           ],

@@ -31,7 +31,9 @@ class _RegisterStep5ViewState extends State<RegisterStep5View> {
               crossAxisAlignment: .start,
               children: [
                 SizedBox(height: 16.h),
-                Center(child: Image.asset(AppAssets.logoTransparemt)),
+                Center(
+                  child: Image.asset(AppAssets.logoTransparemt, width: 182.w),
+                ),
                 SizedBox(height: 36.h),
                 Text(
                   'Create Account',

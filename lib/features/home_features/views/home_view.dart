@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
+import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/features/common_features/views/shift_details_view.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
 import 'package:staffing/features/home_features/widgets/at_glance_card_widget.dart';
 import 'package:staffing/features/home_features/widgets/matric_tile_widget.dart';
@@ -171,7 +173,10 @@ class HomeView extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: 3,
                 separatorBuilder: (context, index) => SizedBox(height: 4.h),
-                itemBuilder: (context, index) => NextShiftCardWidget(),
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () => context.push(const ShiftDetailsView()),
+                  child: NextShiftCardWidget(),
+                ),
               ),
 
               SizedBox(height: 20.h),

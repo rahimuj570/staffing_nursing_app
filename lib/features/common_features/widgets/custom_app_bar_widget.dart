@@ -17,7 +17,7 @@ class CustomAppBarWidget extends StatelessWidget
       child: Row(
         children: [
           title == null
-              ? Image.asset(AppAssets.appBarLogo, height: 40.h)
+              ? Image.asset(AppAssets.appBarLogo, width: 73.w)
               : Text(
                   title!,
                   style: TextStyle(

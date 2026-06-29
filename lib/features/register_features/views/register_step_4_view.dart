@@ -23,7 +23,9 @@ class RegisterStep4View extends StatelessWidget {
               crossAxisAlignment: .start,
               children: [
                 SizedBox(height: 16.h),
-                Center(child: Image.asset(AppAssets.logoTransparemt)),
+                Center(
+                  child: Image.asset(AppAssets.logoTransparemt, width: 182.w),
+                ),
                 SizedBox(height: 36.h),
                 Text(
                   'Create Account',

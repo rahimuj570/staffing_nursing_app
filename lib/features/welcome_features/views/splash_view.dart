@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/features/welcome_features/views/get_started_view.dart';
 
@@ -25,6 +26,8 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Image.asset(AppAssets.logo)));
+    return Scaffold(
+      body: Center(child: Image.asset(AppAssets.logo, width: 192.w)),
+    );
   }
 }
