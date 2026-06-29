@@ -9,7 +9,6 @@ import 'package:staffing/features/common_features/views/shift_details_view.dart'
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/home_main_nav_holder_features/view_models/main_home_nav_holder_view_model.dart';
 import 'package:staffing/features/home_main_nav_holder_features/views/home_main_nav_holder_view.dart';
-import 'package:staffing/features/schedule_features/views/schedule_view.dart';
 
 class ShiftAcceptedSuccessfullView extends StatelessWidget {
   const ShiftAcceptedSuccessfullView({super.key});
