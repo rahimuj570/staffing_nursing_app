@@ -174,7 +174,9 @@ class HomeView extends StatelessWidget {
                 itemCount: 3,
                 separatorBuilder: (context, index) => SizedBox(height: 4.h),
                 itemBuilder: (context, index) => GestureDetector(
-                  onTap: () => context.push(const ShiftDetailsView()),
+                  onTap: () => context.push(
+                    const ShiftDetailsView(isScheduleDetails: true),
+                  ),
                   child: NextShiftCardWidget(),
                 ),
               ),
