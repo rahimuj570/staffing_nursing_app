@@ -11,7 +11,6 @@ import 'package:staffing/features/home_features/widgets/at_glance_card_widget.da
 import 'package:staffing/features/home_features/widgets/matric_tile_widget.dart';
 import 'package:staffing/features/home_features/widgets/next_shift_card_widget.dart';
 import 'package:staffing/features/home_main_nav_holder_features/view_models/main_home_nav_holder_view_model.dart';
-import 'package:staffing/features/home_main_nav_holder_features/views/home_main_nav_holder_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
