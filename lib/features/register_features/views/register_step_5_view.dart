@@ -41,7 +41,7 @@ class _RegisterStep5ViewState extends State<RegisterStep5View> {
                 ),
                 SizedBox(height: 20.h),
                 Center(
-                  child: StepIndicatorWidget(totalSteps: 5, currentStep: 4),
+                  child: StepIndicatorWidget(totalSteps: 4, currentStep: 3),
                 ),
                 SizedBox(height: 16.h),
                 // Text(

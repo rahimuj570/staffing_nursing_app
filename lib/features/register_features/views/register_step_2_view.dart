@@ -34,7 +34,7 @@ class RegisterStep2View extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 Center(
-                  child: StepIndicatorWidget(totalSteps: 5, currentStep: 1),
+                  child: StepIndicatorWidget(totalSteps: 4, currentStep: 1),
                 ),
                 SizedBox(height: 24.h),
                 Consumer<RegisterViewModel>(

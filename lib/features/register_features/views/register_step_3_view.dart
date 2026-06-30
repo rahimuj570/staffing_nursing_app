@@ -5,7 +5,7 @@ import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/register_features/view_models/register_view_model.dart';
-import 'package:staffing/features/register_features/views/register_step_4_view.dart';
+import 'package:staffing/features/register_features/views/register_step_5_view.dart';
 import 'package:staffing/features/register_features/widgets/document_upoload_field_widget.dart';
 import 'package:staffing/features/register_features/widgets/step_indicator_widget.dart';
 
@@ -33,7 +33,7 @@ class RegisterStep3View extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 Center(
-                  child: StepIndicatorWidget(totalSteps: 5, currentStep: 2),
+                  child: StepIndicatorWidget(totalSteps: 4, currentStep: 2),
                 ),
                 SizedBox(height: 24.h),
                 Consumer<RegisterViewModel>(
@@ -68,7 +68,7 @@ class RegisterStep3View extends StatelessWidget {
                         customElevatedButtonWidget(
                           text: 'Continue',
                           onTapped: () {
-                            context.push(RegisterStep4View());
+                            context.push(RegisterStep5View());
                           },
                         ),
                       ],

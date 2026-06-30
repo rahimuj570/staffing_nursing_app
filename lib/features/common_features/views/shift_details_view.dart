@@ -343,6 +343,17 @@ class ShiftDetailsView extends StatelessWidget {
                         ),
                         SizedBox(height: 12.h),
                         customElevatedButtonWidget(
+                          icon: Icons.close,
+                          backgroundColor: Colors.white,
+                          forgroundColor: AppColors.themeColor,
+                          borderColor: AppColors.themeColor,
+                          text: 'Cancel The Shift',
+                          onTapped: () {
+                            context.pop();
+                          },
+                        ),
+                        SizedBox(height: 12.h),
+                        customElevatedButtonWidget(
                           icon: Icons.email_outlined,
                           backgroundColor: Colors.white,
                           forgroundColor: AppColors.themeColor,

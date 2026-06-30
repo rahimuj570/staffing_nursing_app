@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
@@ -9,6 +10,8 @@ import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.
 import 'package:staffing/features/home_features/widgets/at_glance_card_widget.dart';
 import 'package:staffing/features/home_features/widgets/matric_tile_widget.dart';
 import 'package:staffing/features/home_features/widgets/next_shift_card_widget.dart';
+import 'package:staffing/features/home_main_nav_holder_features/view_models/main_home_nav_holder_view_model.dart';
+import 'package:staffing/features/home_main_nav_holder_features/views/home_main_nav_holder_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -163,9 +166,32 @@ class HomeView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20.h),
-              Text(
-                'Your Next Shift',
-                style: TextStyle(fontSize: 16.sp, fontWeight: .w500),
+              Wrap(
+                children: [
+                  Text(
+                    'Your Next Shift',
+                    style: TextStyle(fontSize: 16.sp, fontWeight: .w500),
+                  ),
+                  SizedBox(width: 8.w),
+                  Text(
+                    '/',
+                    style: TextStyle(fontSize: 16.sp, fontWeight: .w500),
+                  ),
+                  SizedBox(width: 8.w),
+                  InkWell(
+                    onTap: () {
+                      context.read<MainHomeNavHolderViewModel>().changeIndex(1);
+                    },
+                    child: Text(
+                      'Available Shifts',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: .w500,
+                        color: AppColors.themeColorLight,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 8.h),
               ListView.separated(
