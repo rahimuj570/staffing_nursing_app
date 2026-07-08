@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/network/api_service.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_text_field_widget.dart';
@@ -17,6 +18,7 @@ class LoginViews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ApiService.get('https://jsonplaceholder.typicode.com/todos/1');
     TextEditingController emailTEC = TextEditingController();
     TextEditingController passwordTEC = TextEditingController();
     return Scaffold(
