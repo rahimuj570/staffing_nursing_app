@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/services/auth_prefs_service.dart';
+import 'package:staffing/app/utils/show_status_snackbar_util.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
 import 'package:staffing/features/home_main_nav_holder_features/view_models/main_home_nav_holder_view_model.dart';
+import 'package:staffing/features/register_features/views/register_step_2_view.dart';
 
 class HomeMainNavHolderView extends StatefulWidget {
   const HomeMainNavHolderView({super.key});
@@ -16,8 +20,17 @@ class _HomeMainNavHolderViewState extends State<HomeMainNavHolderView> {
   @override
   void initState() {
     // TODO: implement initState
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<LoginViewModel>().fetchMe();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await context.read<LoginViewModel>().fetchMe();
+      if (context.read<LoginViewModel>().currentUser?.onboardingComplete ==
+          false) {
+        showStatusSnackbar(
+          context,
+          message: 'Your account is not completed yet. Please complete it.',
+          type: .error,
+        );
+        context.pushReplacement(RegisterStep2View());
+      }
     });
     super.initState();
   }
