@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/extensions/route.dart';
-import 'package:staffing/app/services/auth_prefs_service.dart';
 import 'package:staffing/app/utils/show_status_snackbar_util.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
 import 'package:staffing/features/home_main_nav_holder_features/view_models/main_home_nav_holder_view_model.dart';
