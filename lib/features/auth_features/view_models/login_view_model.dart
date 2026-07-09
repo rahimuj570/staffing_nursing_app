@@ -34,4 +34,17 @@ class LoginViewModel extends ChangeNotifier {
     notifyListeners();
     return response;
   }
+
+  Future<void> fetchMe() async {
+    isLoading = true;
+    notifyListeners();
+    NetworkResponseModel response = await ApiService.get(UrlList.authMe);
+    if (response.isSuccess) {
+      currentUser = AuthUserResponseModel.fromJson(
+        response.responseData['data'],
+      );
+    }
+    isLoading = false;
+    notifyListeners();
+  }
 }

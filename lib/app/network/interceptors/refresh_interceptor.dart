@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/network/dio_client.dart';
+import 'package:staffing/app/services/auth_logout_event_bus.dart';
+import 'package:staffing/app/services/auth_prefs_service.dart';
 
 class RefreshInterceptor extends Interceptor {
   final Dio dio;
@@ -17,7 +20,6 @@ class RefreshInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    // final success = await _refreshToken();
     bool success;
     if (_isRefreshing) {
       success = await _refreshFuture!;
@@ -34,10 +36,12 @@ class RefreshInterceptor extends Interceptor {
     }
 
     if (!success) {
+      await AuthPrefsService().removeToken();
+      AuthLogoutEventBus.instance.logout();
       return handler.next(err);
     }
 
-    final token = ""; //await AuthPrefsService().getToken();
+    final token = await AuthPrefsService().getToken();
 
     err.requestOptions.headers["Authorization"] = "Bearer $token";
 
@@ -48,9 +52,7 @@ class RefreshInterceptor extends Interceptor {
 
   Future<bool> _refreshToken() async {
     try {
-      final refreshToken = '';
-      // await AuthPrefsService()
-      //     .getRefreshToken();
+      final refreshToken = await AuthPrefsService().getRefreshToken();
 
       if (refreshToken == null) {
         return false;
@@ -59,19 +61,14 @@ class RefreshInterceptor extends Interceptor {
       final refreshDio = DioClient.createRefreshDio();
 
       final response = await refreshDio.post(
-        "https://api.blacklandcestry.com/api/refresh/",
+        "${UrlList.baseUrl}${UrlList.refrteshToken}",
         data: {"refresh_token": refreshToken},
       );
 
       if (response.statusCode == 200) {
-        // await AuthPrefsService().saveToken(
-        //   response.data["token"],
-        // );
+        await AuthPrefsService().saveToken(response.data["access"]);
 
-        // await AuthPrefsService()
-        //     .saveRefreshToken(
-        //   response.data["refreshToken"],
-        // );
+        await AuthPrefsService().saveRefreshToken(response.data["refresh"]);
 
         return true;
       }
