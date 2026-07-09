@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +12,6 @@ import 'package:staffing/app/utils/show_status_snackbar_util.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_text_field_widget.dart';
 import 'package:staffing/features/register_features/view_models/register_user_view_model.dart';
-import 'package:staffing/features/register_features/views/register_step_2_view.dart';
 import 'package:staffing/features/register_features/views/register_user_otp_vefication_view.dart';
 import 'package:staffing/features/register_features/widgets/step_indicator_widget.dart';
 

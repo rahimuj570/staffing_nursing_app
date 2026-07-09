@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
-import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/extensions/route.dart';
