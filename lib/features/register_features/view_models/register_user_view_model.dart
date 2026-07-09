@@ -1,54 +1,88 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/network/api_service.dart';
 import 'package:staffing/app/network/network_response_model.dart';
 
-class ForgotPasswordViewModel extends ChangeNotifier {
+class RegisterUserViewModel extends ChangeNotifier {
   bool passwordObsecure = true;
+  bool confirmPasswordObsecure = true;
 
   void changePasswordObsecure() {
     passwordObsecure = !passwordObsecure;
     notifyListeners();
   }
 
-  bool confirmPasswordObsecure = true;
-
   void changeConfirmPasswordObsecure() {
     confirmPasswordObsecure = !confirmPasswordObsecure;
     notifyListeners();
   }
 
-  bool isLoading = false;
-  Future<NetworkResponseModel> requestForOTP({required String email}) async {
-    isLoading = true;
+  // {
+  //   "name": "string",
+  //   "phone": "string",
+  //   "email": "user@example.com",
+  //   "password": "string",
+  //   "password_confirm": "string",
+  //   "address": "string",
+  //   "ssn": "string",
+  //   "profile_picture": "string"
+  // }
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  Future<NetworkResponseModel> registerUser({
+    required String name,
+    required String phone,
+    required String email,
+    required String password,
+    required String passwordConfirm,
+    required String address,
+    required String ssn,
+    required File? profilePicture,
+  }) async {
+    _isLoading = true;
     notifyListeners();
+
+    FormData formData = FormData.fromMap({
+      'name': name,
+      'phone': phone,
+      'email': email,
+      'password': password,
+      'password_confirm': passwordConfirm,
+      'address': address,
+      'ssn': ssn,
+      'profile_picture': await MultipartFile.fromFile(profilePicture!.path),
+      'role': "nurse",
+    });
     NetworkResponseModel response = await ApiService.post(
-      UrlList.requestForgotPasswordOTP,
-      data: {"email": email},
+      UrlList.registerUser,
+      data: formData,
+      options: Options(headers: {"Content-Type": "multipart/form-data"}),
     );
-    isLoading = false;
+
+    _isLoading = false;
     notifyListeners();
     return response;
   }
 
-  ///////////////////Verify OTP////////////////////
-  ///
   Future<NetworkResponseModel> verifyOtp({
     required String email,
     required String otp,
   }) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
     NetworkResponseModel response = await ApiService.post(
-      UrlList.verifyForgotPasswordOtp,
+      UrlList.registerUserOtp,
       data: {"email": email, "code": otp},
     );
-    isLoading = false;
+    _isLoading = false;
     notifyListeners();
     return response;
   }
 
-  ///////////////////////// PASS RESNT ///////////////////////////
   int resendOtpTimer = 0;
 
   void startResendOtpTimer() async {
@@ -67,38 +101,10 @@ class ForgotPasswordViewModel extends ChangeNotifier {
   Future<NetworkResponseModel> resendOtp({required String email}) async {
     NetworkResponseModel response = await ApiService.post(
       UrlList.registerUserResendOtp,
-      data: {"email": email, "purpose": "password_reset"},
+      data: {"email": email, "purpose": "registration"},
     );
     startResendOtpTimer();
 
-    return response;
-  }
-
-  ////////////////////PASS RESET/////////////
-  ///
-  Future<NetworkResponseModel> resetPassword({
-    required String resetToken,
-    required String password,
-    required String passwordConfirm,
-  }) async {
-    isLoading = true;
-    notifyListeners();
-    //     {
-    //   "reset_token": "string",
-    //   "password": "string",
-    //   "password_confirm": "string"
-    // }
-
-    NetworkResponseModel response = await ApiService.post(
-      UrlList.forgotPasswordReset,
-      data: {
-        "reset_token": resetToken,
-        "password": password,
-        "password_confirm": passwordConfirm,
-      },
-    );
-    isLoading = false;
-    notifyListeners();
     return response;
   }
 }

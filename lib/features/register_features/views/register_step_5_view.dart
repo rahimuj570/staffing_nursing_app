@@ -2,10 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/network/network_response_model.dart';
+import 'package:staffing/app/utils/show_status_snackbar_util.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
+import 'package:staffing/features/register_features/view_models/register_view_model.dart';
 import 'package:staffing/features/register_features/views/register_successfull_view.dart';
 import 'package:staffing/features/register_features/widgets/step_indicator_widget.dart';
 
@@ -151,16 +155,35 @@ class _RegisterStep5ViewState extends State<RegisterStep5View> {
                   ],
                 ),
                 SizedBox(height: 20.h),
-                customElevatedButtonWidget(
-                  text: 'Submit Application',
-                  onTapped:
-                      isTermsAccepted == true &&
-                          isPrivacyPolicyAccepted == true &&
-                          accuracyAgreementAccepted == true
-                      ? () {
-                          showSuccessDialog(context);
-                        }
-                      : null,
+                Consumer<RegisterViewModel>(
+                  builder: (context, provider, child) => Visibility(
+                    visible: provider.isLoading == false,
+                    replacement: Center(child: CircularProgressIndicator()),
+                    child: customElevatedButtonWidget(
+                      text: 'Submit Application',
+                      onTapped:
+                          isTermsAccepted == true &&
+                              isPrivacyPolicyAccepted == true &&
+                              accuracyAgreementAccepted == true
+                          ? () async {
+                              NetworkResponseModel responseModel =
+                                  await provider.registerNurseProfile();
+
+                              if (responseModel.isSuccess) {
+                                showSuccessDialog(context);
+                              } else {
+                                showStatusSnackbar(
+                                  context,
+                                  message:
+                                      responseModel.message ??
+                                      'Failed to register',
+                                  type: .error,
+                                );
+                              }
+                            }
+                          : null,
+                    ),
+                  ),
                 ),
               ],
             ),

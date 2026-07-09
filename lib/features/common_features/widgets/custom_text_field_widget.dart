@@ -12,6 +12,7 @@ Widget customTextFieldWidget({
   IconData? suffixIcon,
   IconData? prefixIcon,
   String? Function(String?)? validator,
+  String? Function(String?)? onChanged,
   VoidCallback? onSuffixTap,
 }) {
   return Column(
@@ -29,9 +30,11 @@ Widget customTextFieldWidget({
         ),
       if (label.isNotEmpty) SizedBox(height: 4.h),
       TextFormField(
+        controller: controller,
+        onChanged: onChanged,
         readOnly: readOnly,
         obscureText: obscureText,
-        keyboardType: .emailAddress,
+        keyboardType: textInputType,
         validator: validator,
         autovalidateMode: .onUserInteraction,
         decoration: InputDecoration(

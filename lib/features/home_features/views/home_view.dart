@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
+import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
 import 'package:staffing/features/common_features/views/shift_details_view.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
 import 'package:staffing/features/home_features/widgets/at_glance_card_widget.dart';
@@ -14,6 +17,17 @@ import 'package:staffing/features/home_main_nav_holder_features/view_models/main
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
+
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return "Good Morning";
+    } else if (hour < 17) {
+      return "Good Afternoon";
+    } else {
+      return "Good Evening";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +47,7 @@ class HomeView extends StatelessWidget {
                       crossAxisAlignment: .start,
                       children: [
                         Text(
-                          'Tuesday, June 16, 2026',
+                          DateFormat('EEEE, MMMM d, y').format(DateTime.now()),
                           style: TextStyle(
                             fontSize: 12.sp,
                             fontWeight: .w400,
@@ -41,7 +55,7 @@ class HomeView extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Good Morning, Shanae',
+                          '${_getGreeting()}, ${context.watch<LoginViewModel>().currentUser?.name ?? "".split(' ').last}',
                           style: TextStyle(fontSize: 20.sp, fontWeight: .w600),
                         ),
                         Text(
@@ -56,11 +70,22 @@ class HomeView extends StatelessWidget {
                     width: 72.w,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColors.greyColor,
+                      color: AppColors.greyLight,
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100.r),
-                      child: Image.asset(AppAssets.nurseDp, fit: BoxFit.cover),
+                      child: Image.network(
+                        "${UrlList.baseUrl}${context.watch<LoginViewModel>().currentUser?.profilePicture ?? ''}",
+                        errorBuilder: (context, error, stackTrace) {
+                          print("Error: $error");
+                          return Icon(
+                            Remix.user_3_line,
+                            size: 30.r,
+                            color: AppColors.greyLight,
+                          );
+                        },
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ],

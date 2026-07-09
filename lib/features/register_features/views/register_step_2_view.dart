@@ -15,6 +15,7 @@ class RegisterStep2View extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -39,6 +40,7 @@ class RegisterStep2View extends StatelessWidget {
                 SizedBox(height: 24.h),
                 Consumer<RegisterViewModel>(
                   builder: (context, provider, child) => Form(
+                    key: formKey,
                     child: Column(
                       children: [
                         NurseTypeCardWidget(
@@ -75,16 +77,18 @@ class RegisterStep2View extends StatelessWidget {
                         ),
 
                         customTextFieldWidget(
+                          validator: (p0) => p0!.isEmpty ? 'Required' : null,
                           label: '',
                           controller: provider.experienceTEC,
-                          textInputType: .text,
+                          textInputType: .number,
                           placeHolder: 'Years of Experience',
                         ),
                         SizedBox(height: 16.h),
                         customTextFieldWidget(
+                          validator: (p0) => p0!.isEmpty ? 'Required' : null,
                           label: '',
                           controller: provider.stateLicenseNumberTEC,
-                          textInputType: .phone,
+                          textInputType: .text,
                           placeHolder: 'State License Number',
                         ),
                         SizedBox(height: 16.h),
@@ -93,7 +97,9 @@ class RegisterStep2View extends StatelessWidget {
                         customElevatedButtonWidget(
                           text: 'Continue',
                           onTapped: () {
-                            context.push(const RegisterStep3View());
+                            if (formKey.currentState!.validate()) {
+                              context.push(const RegisterStep3View());
+                            }
                           },
                         ),
                         SizedBox(height: 16.h),

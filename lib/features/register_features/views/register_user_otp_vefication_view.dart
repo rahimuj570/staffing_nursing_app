@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,22 +9,23 @@ import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/network/network_response_model.dart';
+import 'package:staffing/app/services/auth_prefs_service.dart';
 import 'package:staffing/app/utils/show_status_snackbar_util.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
-import 'package:staffing/features/forgot_password_features/view_models/forgot_password_view_model.dart';
-import 'package:staffing/features/forgot_password_features/views/forgot_password_reset_password_view.dart';
+import 'package:staffing/features/register_features/view_models/register_user_view_model.dart';
+import 'package:staffing/features/register_features/views/register_step_2_view.dart';
 
-class ForgotPasswordOtpVeficationView extends StatefulWidget {
+class RegisterUserOtpVeficationView extends StatefulWidget {
   final String email;
-  const ForgotPasswordOtpVeficationView({super.key, required this.email});
+  const RegisterUserOtpVeficationView({super.key, required this.email});
 
   @override
-  State<ForgotPasswordOtpVeficationView> createState() =>
-      _ForgotPasswordOtpVeficationViewState();
+  State<RegisterUserOtpVeficationView> createState() =>
+      _RegisterUserOtpVeficationViewState();
 }
 
-class _ForgotPasswordOtpVeficationViewState
-    extends State<ForgotPasswordOtpVeficationView> {
+class _RegisterUserOtpVeficationViewState
+    extends State<RegisterUserOtpVeficationView> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController otpController = TextEditingController();
   bool enableVerifyBtn = false;
@@ -41,7 +44,7 @@ class _ForgotPasswordOtpVeficationViewState
         child: SafeArea(
           child: Padding(
             padding: .symmetric(horizontal: 20.w),
-            child: Consumer<ForgotPasswordViewModel>(
+            child: Consumer<RegisterUserViewModel>(
               builder: (context, provider, child) => Form(
                 key: _formKey,
                 child: Column(
@@ -95,7 +98,7 @@ class _ForgotPasswordOtpVeficationViewState
                       ),
                     ),
                     SizedBox(height: 40.h),
-                    Consumer<ForgotPasswordViewModel>(
+                    Consumer<RegisterUserViewModel>(
                       builder: (context, provider, child) => Visibility(
                         visible: provider.isLoading == false,
                         replacement: const Center(
@@ -119,11 +122,16 @@ class _ForgotPasswordOtpVeficationViewState
                                         type: MessageType.success,
                                       );
 
+                                      AuthPrefsService().saveToken(
+                                        responseModel
+                                            .responseData['data']["access"],
+                                      );
+                                      AuthPrefsService().saveRefreshToken(
+                                        responseModel
+                                            .responseData['data']["refresh"],
+                                      );
                                       context.pushReplacement(
-                                        ForgotPasswordResetPasswordView(
-                                          resetToken: responseModel
-                                              .responseData['data']['reset_token'],
-                                        ),
+                                        const RegisterStep2View(),
                                       );
                                     } else {
                                       showStatusSnackbar(

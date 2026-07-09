@@ -4,6 +4,7 @@ import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/services/auth_prefs_service.dart';
 import 'package:staffing/features/auth_features/views/login_views.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
@@ -338,7 +339,9 @@ class MyProfileView extends StatelessWidget {
                                         Expanded(
                                           child: customElevatedButtonWidget(
                                             text: 'Yes, Logout',
-                                            onTapped: () {
+                                            onTapped: () async {
+                                              await AuthPrefsService()
+                                                  .removeToken();
                                               context.pushRemoveUntil(
                                                 LoginViews(),
                                               );

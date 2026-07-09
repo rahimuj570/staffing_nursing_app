@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/utils/show_status_snackbar_util.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/register_features/view_models/register_view_model.dart';
 import 'package:staffing/features/register_features/views/register_step_5_view.dart';
@@ -68,7 +69,17 @@ class RegisterStep3View extends StatelessWidget {
                         customElevatedButtonWidget(
                           text: 'Continue',
                           onTapped: () {
-                            context.push(RegisterStep5View());
+                            if (provider.socialSecurityCard == null ||
+                                provider.nursingLicense == null ||
+                                provider.physicalExamination == null) {
+                              showStatusSnackbar(
+                                context,
+                                message: "Must need to upload all documents",
+                                type: .error,
+                              );
+                            } else {
+                              context.push(RegisterStep5View());
+                            }
                           },
                         ),
                       ],
