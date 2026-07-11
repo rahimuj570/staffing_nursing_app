@@ -1,16 +1,18 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart'; // Ensure you have intl package in pubspec.yaml for clean date formatting
+import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_colors.dart';
+import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/network/network_response_model.dart';
 import 'package:staffing/app/utils/show_status_snackbar_util.dart';
 import 'package:staffing/features/common_features/widgets/custom_dropdown_field_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_text_field_widget.dart';
+import 'package:staffing/features/shift_features/view_models/shift_view_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class FilterShiftView extends StatefulWidget {
@@ -21,6 +23,10 @@ class FilterShiftView extends StatefulWidget {
 }
 
 class _FilterShiftViewState extends State<FilterShiftView> {
+  String shiftType = '';
+  String profession = '';
+  String minRange = '';
+
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   final RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOn;
@@ -122,6 +128,13 @@ class _FilterShiftViewState extends State<FilterShiftView> {
   }
 
   @override
+  void dispose() {
+    _locationTEC.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Filter Shifts')),
@@ -139,6 +152,7 @@ class _FilterShiftViewState extends State<FilterShiftView> {
               suffixIcon: RemixIcons.crosshair_2_line,
               onChanged: (p0) {
                 isChangedAddress = true;
+                return;
               },
               onSuffixTap: () {
                 showDialog(
@@ -275,9 +289,11 @@ class _FilterShiftViewState extends State<FilterShiftView> {
                 Expanded(
                   child: CustomDropdownFieldWidget(
                     label: 'Profession',
-                    value: 'RN',
-                    items: ['RN', 'LPN', 'CNA'],
-                    onChanged: (value) {},
+                    value: profession.isEmpty ? 'All' : profession,
+                    items: ['All', 'RN', 'LPN', 'CNA'],
+                    onChanged: (value) {
+                      profession = value!;
+                    },
                   ),
                 ),
               ],
@@ -288,17 +304,20 @@ class _FilterShiftViewState extends State<FilterShiftView> {
                 Expanded(
                   child: CustomDropdownFieldWidget(
                     label: 'Shift Type',
-                    value: 'All',
-                    items: ['All', 'Morning', 'Afternoon', 'Evening', 'Night'],
-                    onChanged: (value) {},
+                    value: shiftType.isEmpty ? 'All' : shiftType,
+                    items: ['All', 'Days', 'Nights', 'Evenings', 'Overnight'],
+                    onChanged: (value) {
+                      shiftType = value!;
+                    },
                   ),
                 ),
                 SizedBox(width: 8.w),
                 Expanded(
                   child: CustomDropdownFieldWidget(
                     label: 'Pay Range',
-                    value: '\$20+/hr',
+                    value: minRange.isEmpty ? '\$0+/hr' : minRange,
                     items: [
+                      '\$0+/hr',
                       '\$20+/hr',
                       '\$30+/hr',
                       '\$40+/hr',
@@ -308,13 +327,56 @@ class _FilterShiftViewState extends State<FilterShiftView> {
                       '\$80+/hr',
                       '\$100+/hr',
                     ],
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      minRange = value!;
+                      //need to extract only number 20, 300 from this string "\$20+/hr, \$300+/hr"
+                      minRange = minRange.substring(1);
+                      minRange = minRange.substring(0, minRange.indexOf('+'));
+                      print("minRange: $minRange");
+                    },
                   ),
                 ),
               ],
             ),
             SizedBox(height: 32.h),
-            customElevatedButtonWidget(text: 'Apply Filter', onTapped: () {}),
+            Consumer<ShiftViewModel>(
+              builder: (context, provider, child) => provider.isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : customElevatedButtonWidget(
+                      text: 'Apply Filter',
+                      onTapped: () async {
+                        if (isChangedAddress) {
+                          await getLatLngFromAddress(_locationTEC.text);
+                          isChangedAddress = false;
+                        }
+                        NetworkResponseModel responseModel = await context
+                            .read<ShiftViewModel>()
+                            .searchShifts(
+                              facility: _locationTEC.text,
+                              lat: lat,
+                              lng: lng,
+                              profession: profession == 'All'
+                                  ? null
+                                  : profession,
+                              // minRange: double.parse(minRange),
+                              shiftType: shiftType == 'All'
+                                  ? null
+                                  : shiftType.toLowerCase(),
+                              fromDate: _rangeStart != null
+                                  ? DateFormat(
+                                      'yyyy-MM-dd',
+                                    ).format(_rangeStart!)
+                                  : null,
+                              toDate: _rangeEnd != null
+                                  ? DateFormat('yyyy-MM-dd').format(_rangeEnd!)
+                                  : null,
+                            );
+                        if (responseModel.isSuccess) {
+                          context.pop();
+                        }
+                      },
+                    ),
+            ),
           ],
         ),
       ),

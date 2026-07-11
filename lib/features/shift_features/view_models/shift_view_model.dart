@@ -12,8 +12,10 @@ class ShiftViewModel extends ChangeNotifier {
 
   String? next;
   String? previous;
+  bool isFilteredResult = false;
 
   Future<void> fetchShifts() async {
+    isFilteredResult = false;
     next = null;
     previous = null;
     _isLoading = true;
@@ -30,14 +32,41 @@ class ShiftViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> searchShifts({required String facility}) async {
+  Future<NetworkResponseModel> searchShifts({
+    String? facility,
+    double? lat,
+    double? lng,
+    String? profession,
+    double? minRange,
+    String? shiftType,
+    String? fromDate,
+    String? toDate,
+  }) async {
+    if (lat == null ||
+        lng == null ||
+        minRange == null ||
+        fromDate == null ||
+        toDate == null ||
+        shiftType == null ||
+        profession == null) {
+      isFilteredResult = true;
+    }
     next = null;
     previous = null;
     _isLoading = true;
     notifyListeners();
     NetworkResponseModel responseModel = await ApiService.get(
       UrlList.shifts,
-      queryParameters: {'search': facility},
+      queryParameters: {
+        'search': facility,
+        'latitude': lat?.toStringAsFixed(6),
+        'longitude': lng?.toStringAsFixed(6),
+        'profession': profession,
+        'pay_min': minRange,
+        'shift_type': shiftType,
+        'from_date': fromDate,
+        'to_date': toDate,
+      },
     );
     if (responseModel.isSuccess) {
       shiftResponseModel = responseModel.responseData['data']
@@ -48,5 +77,6 @@ class ShiftViewModel extends ChangeNotifier {
     }
     _isLoading = false;
     notifyListeners();
+    return responseModel;
   }
 }

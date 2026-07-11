@@ -23,6 +23,15 @@ class ShiftView extends StatefulWidget {
 }
 
 class _ShiftViewState extends State<ShiftView> {
+  TextEditingController searchTEC = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    searchTEC.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -32,12 +41,12 @@ class _ShiftViewState extends State<ShiftView> {
   }
 
   Future<void> _initialized() async {
+    searchTEC.clear();
     await context.read<ShiftViewModel>().fetchShifts();
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController searchTEC = TextEditingController();
     return Scaffold(
       appBar: CustomAppBarWidget(title: 'Shifts'),
       body: Padding(
@@ -64,7 +73,9 @@ class _ShiftViewState extends State<ShiftView> {
                         ),
                         SizedBox(width: 8.w),
                         GestureDetector(
-                          onTap: () => context.push(FilterShiftView()),
+                          onTap: () => provider.isFilteredResult
+                              ? provider.fetchShifts()
+                              : context.push(FilterShiftView()),
                           child: Container(
                             height: 46.h,
                             width: 46.w,
@@ -73,7 +84,9 @@ class _ShiftViewState extends State<ShiftView> {
                               borderRadius: .circular(12.r),
                             ),
                             child: Icon(
-                              Remix.filter_line,
+                              provider.isFilteredResult
+                                  ? RemixIcons.filter_off_fill
+                                  : Remix.filter_line,
                               size: 20.r,
                               color: Colors.white,
                             ),
@@ -82,39 +95,57 @@ class _ShiftViewState extends State<ShiftView> {
                       ],
                     ),
                     SizedBox(height: 20.h),
-                    Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () async => _initialized(),
-                        child: ListView.separated(
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: 10.h),
-                          itemCount:
-                              provider.shiftResponseModel?.length ?? 0 + 1,
-                          itemBuilder: (context, index) {
-                            ShiftResponseModel model =
-                                provider.shiftResponseModel![index];
-                            return index == 10
-                                ? Center(child: SizedBox(height: 20.h))
-                                : GestureDetector(
-                                    onTap: () =>
-                                        context.push(ShiftDetailsView(id: 0)),
-                                    child: ShiftCardWidget(
-                                      title: model.facility.name ?? 'N/A',
-                                      location: model.facility.address ?? 'N/A',
-                                      date: formatDate(
-                                        model.shiftDate ?? '2026-07-1',
-                                      ),
-                                      time:
-                                          '${formatTime(model.startTime ?? '00:00:00')} - ${formatTime(model.endTime ?? '00:00:00')}',
-                                      status: model.profession ?? 'N/A',
-                                      ratePerHour: model.payRate ?? '0.00',
-                                      image: AppAssets.hospitalImage,
-                                    ),
-                                  );
-                          },
-                        ),
-                      ),
-                    ),
+                    provider.shiftResponseModel?.isEmpty ?? true
+                        ? Center(
+                            child: Column(
+                              children: [
+                                Text('No Shifts'),
+                                IconButton(
+                                  onPressed: () {
+                                    _initialized();
+                                  },
+                                  icon: Icon(Icons.refresh),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Expanded(
+                            child: RefreshIndicator(
+                              onRefresh: () async => _initialized(),
+                              child: ListView.separated(
+                                separatorBuilder: (context, index) =>
+                                    SizedBox(height: 10.h),
+                                itemCount:
+                                    provider.shiftResponseModel?.length ??
+                                    0 + 1,
+                                itemBuilder: (context, index) {
+                                  ShiftResponseModel model =
+                                      provider.shiftResponseModel![index];
+                                  return index == 10
+                                      ? Center(child: SizedBox(height: 20.h))
+                                      : GestureDetector(
+                                          onTap: () => context.push(
+                                            ShiftDetailsView(id: 0),
+                                          ),
+                                          child: ShiftCardWidget(
+                                            title: model.facility.name ?? 'N/A',
+                                            location:
+                                                model.facility.address ?? 'N/A',
+                                            date: formatDate(
+                                              model.shiftDate ?? '2026-07-1',
+                                            ),
+                                            time:
+                                                '${formatTime(model.startTime ?? '00:00:00')} - ${formatTime(model.endTime ?? '00:00:00')}',
+                                            status: model.profession ?? 'N/A',
+                                            ratePerHour:
+                                                model.payRate ?? '0.00',
+                                            image: AppAssets.hospitalImage,
+                                          ),
+                                        );
+                                },
+                              ),
+                            ),
+                          ),
                   ],
                 ),
         ),
