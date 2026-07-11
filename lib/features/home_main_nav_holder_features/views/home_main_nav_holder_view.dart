@@ -5,8 +5,10 @@ import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/utils/show_status_snackbar_util.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
+import 'package:staffing/features/auth_features/views/login_views.dart';
 import 'package:staffing/features/home_main_nav_holder_features/view_models/main_home_nav_holder_view_model.dart';
 import 'package:staffing/features/register_features/views/register_step_2_view.dart';
+import 'package:staffing/features/register_features/views/register_successfull_view.dart';
 
 class HomeMainNavHolderView extends StatefulWidget {
   const HomeMainNavHolderView({super.key});
@@ -20,18 +22,39 @@ class _HomeMainNavHolderViewState extends State<HomeMainNavHolderView> {
   void initState() {
     // TODO: implement initState
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await context.read<LoginViewModel>().fetchMe();
-      if (context.read<LoginViewModel>().currentUser?.onboardingComplete ==
-          false) {
-        showStatusSnackbar(
-          context,
-          message: 'Your account is not completed yet. Please complete it.',
-          type: .error,
-        );
-        context.pushReplacement(RegisterStep2View());
-      }
+      await _initilaize();
     });
     super.initState();
+  }
+
+  Future<void> _initilaize() async {
+    await context.read<LoginViewModel>().fetchMe();
+    if (context.read<LoginViewModel>().currentUser?.onboardingComplete ==
+        false) {
+      showStatusSnackbar(
+        context,
+        message: 'Your account is not completed yet. Please complete it.',
+        type: .error,
+      );
+      context.pushReplacement(RegisterStep2View());
+    } else if (context
+            .read<LoginViewModel>()
+            .nurseProfileMeResponseModel
+            ?.applicationStatus ==
+        'pending_review') {
+      context.pushRemoveUntil(RegisterSuccessfullView());
+    } else if (context
+            .read<LoginViewModel>()
+            .nurseProfileMeResponseModel
+            ?.applicationStatus ==
+        'rejected') {
+      showStatusSnackbar(
+        context,
+        message: 'Your application is rejected',
+        type: .error,
+      );
+      context.pushRemoveUntil(LoginViews());
+    }
   }
 
   @override

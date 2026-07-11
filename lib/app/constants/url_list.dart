@@ -15,4 +15,5 @@ class UrlList {
   static const String forgotPasswordReset = '/api/v1/auth/reset-password/';
 
   static const String authMe = '/api/v1/auth/me/';
+  static const String nurseProfileMe = '/api/v1/nurses/me/profile/';
 }

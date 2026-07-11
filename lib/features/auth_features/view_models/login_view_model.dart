@@ -3,6 +3,7 @@ import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/network/api_service.dart';
 import 'package:staffing/app/network/network_response_model.dart';
 import 'package:staffing/features/auth_features/models/auth_user_response_model.dart';
+import 'package:staffing/features/auth_features/models/nurse_profile_me_response_model.dart';
 
 class LoginViewModel extends ChangeNotifier {
   bool _isObscure = true;
@@ -14,6 +15,7 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   AuthUserResponseModel? currentUser;
+  NurseProfileMeResponseModel? nurseProfileMeResponseModel;
   bool isLoading = false;
   Future<NetworkResponseModel> login({
     required String email,
@@ -38,10 +40,22 @@ class LoginViewModel extends ChangeNotifier {
   Future<void> fetchMe() async {
     isLoading = true;
     notifyListeners();
-    NetworkResponseModel response = await ApiService.get(UrlList.authMe);
-    if (response.isSuccess) {
+
+    final List<NetworkResponseModel> responses = await Future.wait([
+      ApiService.get(UrlList.authMe),
+      ApiService.get(UrlList.nurseProfileMe),
+    ]);
+
+    NetworkResponseModel authResponse = responses[0];
+    NetworkResponseModel nurseResponse = responses[1];
+    if (authResponse.isSuccess) {
       currentUser = AuthUserResponseModel.fromJson(
-        response.responseData['data'],
+        authResponse.responseData['data'],
+      );
+    }
+    if (nurseResponse.isSuccess) {
+      nurseProfileMeResponseModel = NurseProfileMeResponseModel.fromJson(
+        nurseResponse.responseData['data'],
       );
     }
     isLoading = false;
