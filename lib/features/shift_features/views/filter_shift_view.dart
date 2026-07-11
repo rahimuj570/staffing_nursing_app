@@ -26,6 +26,7 @@ class _FilterShiftViewState extends State<FilterShiftView> {
   String shiftType = '';
   String profession = '';
   String minRange = '';
+  bool isAddressFetching = false;
 
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -169,6 +170,8 @@ class _FilterShiftViewState extends State<FilterShiftView> {
                 });
               },
             ),
+            if (isAddressFetching) SizedBox(height: 8.h),
+            if (isAddressFetching) LinearProgressIndicator(),
             SizedBox(height: 16.h),
             Row(
               children: [
@@ -346,8 +349,14 @@ class _FilterShiftViewState extends State<FilterShiftView> {
                       text: 'Apply Filter',
                       onTapped: () async {
                         if (isChangedAddress) {
+                          setState(() {
+                            isAddressFetching = true;
+                          });
                           await getLatLngFromAddress(_locationTEC.text);
                           isChangedAddress = false;
+                          setState(() {
+                            isAddressFetching = false;
+                          });
                         }
                         NetworkResponseModel responseModel = await context
                             .read<ShiftViewModel>()
