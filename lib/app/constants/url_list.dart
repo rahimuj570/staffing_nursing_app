@@ -16,4 +16,6 @@ class UrlList {
 
   static const String authMe = '/api/v1/auth/me/';
   static const String nurseProfileMe = '/api/v1/nurses/me/profile/';
+
+  static const String homeData = '/api/v1/nurses/me/dashboard/';
 }

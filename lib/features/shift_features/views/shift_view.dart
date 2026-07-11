@@ -61,7 +61,7 @@ class ShiftView extends StatelessWidget {
                 itemBuilder: (context, index) => index == 10
                     ? Center(child: SizedBox(height: 20.h))
                     : GestureDetector(
-                        onTap: () => context.push(ShiftDetailsView()),
+                        onTap: () => context.push(ShiftDetailsView(id: 0)),
                         child: ShiftCardWidget(
                           title: 'Sunrise Care Center',
                           location: 'Atlanta, GA',

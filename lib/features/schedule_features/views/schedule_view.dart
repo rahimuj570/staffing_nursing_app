@@ -89,7 +89,7 @@ class _ScheduleViewState extends State<ScheduleView>
                       ? SizedBox(height: 20.h)
                       : GestureDetector(
                           onTap: () => context.push(
-                            ShiftDetailsView(isScheduleDetails: true),
+                            ShiftDetailsView(isScheduleDetails: true, id: 0),
                           ),
                           child: ShiftCardWidget(
                             title: 'Sunrise Care Center',

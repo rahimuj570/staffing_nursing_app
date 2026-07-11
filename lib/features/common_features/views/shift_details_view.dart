@@ -13,7 +13,12 @@ import 'package:staffing/features/shift_features/views/shift_confirmation_view.d
 
 class ShiftDetailsView extends StatelessWidget {
   final bool isScheduleDetails;
-  const ShiftDetailsView({super.key, this.isScheduleDetails = false});
+  final int id;
+  const ShiftDetailsView({
+    super.key,
+    this.isScheduleDetails = false,
+    required this.id,
+  });
 
   @override
   Widget build(BuildContext context) {
