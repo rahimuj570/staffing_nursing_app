@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:staffing/app/network/network_response_model.dart';
+import 'package:staffing/app/services/toast_service.dart';
 
 class DioExceptionHandler {
   static NetworkResponseModel handle(DioException exception) {
     switch (exception.type) {
       case DioExceptionType.connectionTimeout:
+        ToastService.showError("Connection timeout");
         return NetworkResponseModel(
           isSuccess: false,
           statusCode: -1,
@@ -14,6 +16,7 @@ class DioExceptionHandler {
         );
 
       case DioExceptionType.sendTimeout:
+        ToastService.showError("Request timeout");
         return NetworkResponseModel(
           isSuccess: false,
           statusCode: -1,
@@ -21,6 +24,7 @@ class DioExceptionHandler {
         );
 
       case DioExceptionType.receiveTimeout:
+        ToastService.showError("Response timeout");
         return NetworkResponseModel(
           isSuccess: false,
           statusCode: -1,
@@ -28,6 +32,7 @@ class DioExceptionHandler {
         );
 
       case DioExceptionType.connectionError:
+        ToastService.showError("No internet connection");
         return NetworkResponseModel(
           isSuccess: false,
           statusCode: -1,
@@ -35,6 +40,7 @@ class DioExceptionHandler {
         );
 
       case DioExceptionType.cancel:
+        ToastService.showError("Request cancelled");
         return NetworkResponseModel(
           isSuccess: false,
           statusCode: -1,
@@ -42,6 +48,7 @@ class DioExceptionHandler {
         );
 
       case DioExceptionType.badCertificate:
+        ToastService.showError("Bad certificate");
         return NetworkResponseModel(
           isSuccess: false,
           statusCode: -1,
@@ -49,6 +56,7 @@ class DioExceptionHandler {
         );
 
       case DioExceptionType.badResponse:
+        ToastService.showError(_extractMessage(exception));
         return NetworkResponseModel(
           isSuccess: false,
           statusCode: exception.response?.statusCode ?? -1,
@@ -58,6 +66,7 @@ class DioExceptionHandler {
 
       case DioExceptionType.unknown:
         if (exception.error is SocketException) {
+          ToastService.showError("No internet connection");
           return NetworkResponseModel(
             isSuccess: false,
             statusCode: -1,
@@ -65,6 +74,7 @@ class DioExceptionHandler {
           );
         }
 
+        ToastService.showError(_extractMessage(exception));
         return NetworkResponseModel(
           isSuccess: false,
           statusCode: -1,

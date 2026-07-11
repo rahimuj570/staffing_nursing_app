@@ -1,8 +1,13 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart'; // Ensure you have intl package in pubspec.yaml for clean date formatting
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_colors.dart';
+import 'package:staffing/app/utils/show_status_snackbar_util.dart';
 import 'package:staffing/features/common_features/widgets/custom_dropdown_field_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_text_field_widget.dart';
@@ -18,9 +23,13 @@ class FilterShiftView extends StatefulWidget {
 class _FilterShiftViewState extends State<FilterShiftView> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOn;
+  final RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOn;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+  final TextEditingController _locationTEC = TextEditingController();
+  double? lat;
+  double? lng;
+  bool isChangedAddress = false;
 
   // Helper method to dynamically generate the button label text
   String _getDateRangeText() {
@@ -35,9 +44,85 @@ class _FilterShiftViewState extends State<FilterShiftView> {
     return 'Date'; // Default fallback text
   }
 
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      showStatusSnackbar(context, message: 'Location services are disabled.');
+      throw Exception('Location services are disabled.');
+    }
+
+    // Check permission
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        showStatusSnackbar(
+          context,
+          message: 'Location permissions are denied.',
+        );
+        throw Exception('Location permissions are denied.');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      showStatusSnackbar(
+        context,
+        message:
+            'Location permissions are permanently denied, we cannot request permissions.',
+      );
+      throw Exception('Location permissions are permanently denied.');
+    }
+
+    // Get current position
+    return await Geolocator.getCurrentPosition(
+      locationSettings: LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 0,
+      ),
+    );
+  }
+
+  Future<void> getAddressFromLatLng(double lat, double lng) async {
+    final Geocoding geocoding = Geocoding();
+    try {
+      List<Placemark> placemarks = await geocoding.placemarkFromCoordinates(
+        lat,
+        lng,
+      );
+      Placemark place = placemarks[0];
+      String address =
+          "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+      print("Address: $address");
+      _locationTEC.text = address;
+      setState(() {});
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
+  Future<void> getLatLngFromAddress(String address) async {
+    Geocoding geocoding = Geocoding();
+    try {
+      List<Location> locations = await geocoding.locationFromAddress(address);
+
+      if (locations.isNotEmpty) {
+        double latitude = locations.first.latitude;
+        double longitude = locations.first.longitude;
+        lat = latitude;
+        lng = longitude;
+        print("Latitude: $latitude, Longitude: $longitude");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController locationTEC = TextEditingController();
     return Scaffold(
       appBar: AppBar(title: const Text('Filter Shifts')),
       body: Padding(
@@ -48,11 +133,27 @@ class _FilterShiftViewState extends State<FilterShiftView> {
             customTextFieldWidget(
               prefixIcon: RemixIcons.map_pin_2_line,
               label: '',
-              controller: locationTEC,
+              controller: _locationTEC,
               textInputType: TextInputType.text,
               placeHolder: 'Current Location',
               suffixIcon: RemixIcons.crosshair_2_line,
-              onSuffixTap: () {},
+              onChanged: (p0) {
+                isChangedAddress = true;
+              },
+              onSuffixTap: () {
+                showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) =>
+                      Center(child: CircularProgressIndicator()),
+                );
+                _determinePosition().then((value) {
+                  lat = value.latitude;
+                  lng = value.longitude;
+                  getAddressFromLatLng(lat!, lng!);
+                  Navigator.pop(context);
+                });
+              },
             ),
             SizedBox(height: 16.h),
             Row(

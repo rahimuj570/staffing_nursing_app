@@ -127,9 +127,9 @@ class _HomeViewState extends State<HomeView> {
                               "${UrlList.baseUrl}${context.watch<LoginViewModel>().currentUser?.profilePicture ?? ''}",
                               errorBuilder: (context, error, stackTrace) {
                                 return Icon(
-                                  Remix.user_3_line,
+                                  Icons.person_2_outlined,
                                   size: 30.r,
-                                  color: AppColors.greyLight,
+                                  color: AppColors.greyColor,
                                 );
                               },
                               fit: BoxFit.cover,

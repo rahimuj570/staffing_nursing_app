@@ -86,12 +86,14 @@ class ShiftCardWidget extends StatelessWidget {
                         color: AppColors.gold,
                       ),
                       SizedBox(width: 4.w),
-                      Text(
-                        location,
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          fontWeight: .w600,
-                          color: AppColors.greyColor,
+                      Expanded(
+                        child: Text(
+                          location,
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: .w600,
+                            color: AppColors.greyColor,
+                          ),
                         ),
                       ),
                     ],

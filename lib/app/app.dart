@@ -13,6 +13,7 @@ import 'package:staffing/features/home_main_nav_holder_features/view_models/main
 import 'package:staffing/features/register_features/view_models/register_user_view_model.dart';
 import 'package:staffing/features/register_features/view_models/register_view_model.dart';
 import 'package:staffing/features/schedule_features/view_models/schedule_view_model.dart';
+import 'package:staffing/features/shift_features/view_models/shift_view_model.dart';
 import 'package:staffing/features/welcome_features/views/splash_view.dart';
 
 class MainAppScreen extends StatefulWidget {
@@ -55,6 +56,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
         ChangeNotifierProvider(create: (_) => ScheduleViewModel()),
         ChangeNotifierProvider(create: (_) => RegisterUserViewModel()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => ShiftViewModel()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(402, 874),

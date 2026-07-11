@@ -36,6 +36,7 @@ class AtGlanceCardWidget extends StatelessWidget {
             ),
             Text(
               subtitle,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 12.sp,
                 color: Colors.white,

@@ -14,6 +14,7 @@ Widget customTextFieldWidget({
   String? Function(String?)? validator,
   String? Function(String?)? onChanged,
   VoidCallback? onSuffixTap,
+  Function(String)? onFieldSubmitted,
 }) {
   return Column(
     crossAxisAlignment: .start,
@@ -30,6 +31,7 @@ Widget customTextFieldWidget({
         ),
       if (label.isNotEmpty) SizedBox(height: 4.h),
       TextFormField(
+        onFieldSubmitted: onFieldSubmitted,
         controller: controller,
         onChanged: onChanged,
         readOnly: readOnly,
