@@ -5,8 +5,11 @@ import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/utils/format_date_util.dart';
+import 'package:staffing/app/utils/format_time_util.dart';
 import 'package:staffing/features/common_features/views/shift_details_view.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
+import 'package:staffing/features/common_features/widgets/pagination_widget.dart';
 import 'package:staffing/features/common_features/widgets/shift_card_widget.dart';
 import 'package:staffing/features/schedule_features/view_models/schedule_view_model.dart';
 
@@ -24,10 +27,15 @@ class _ScheduleViewState extends State<ScheduleView>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       context.read<ScheduleViewModel>().changeTabIndex(0);
+      await _initialize();
     });
     _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
+  }
+
+  Future<void> _initialize() async {
+    await context.read<ScheduleViewModel>().fetchSchedule();
   }
 
   @override
@@ -37,76 +45,120 @@ class _ScheduleViewState extends State<ScheduleView>
       body: Padding(
         padding: .symmetric(horizontal: 20.w),
         child: Consumer<ScheduleViewModel>(
-          builder: (context, provider, child) => Column(
-            children: [
-              TabBar(
-                onTap: (value) {
-                  provider.changeTabIndex(_tabController!.index);
-                },
-                controller: _tabController,
-                indicatorSize: .tab,
-                dividerHeight: 0,
-                tabs: [
-                  Tab(child: Text('Upcoming')),
-                  Tab(child: Text('Completed')),
-                  Tab(child: Text('Cancelled')),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              Row(
-                mainAxisAlignment: .spaceBetween,
-                children: [
-                  Text(
-                    'Upcoming Shifts (5) ',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: .w700,
-                      color: AppColors.themeColorLight,
+          builder: (context, provider, child) => provider.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    TabBar(
+                      onTap: (value) async {
+                        provider.changeTabIndex(_tabController!.index);
+                        await provider.fetchSchedule();
+                      },
+                      controller: _tabController,
+                      indicatorSize: .tab,
+                      dividerHeight: 0,
+                      tabs: [
+                        Tab(child: Text('Upcoming')),
+                        Tab(child: Text('Completed')),
+                        Tab(child: Text('Cancelled')),
+                      ],
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 365)),
-                      );
-                    },
-                    icon: Icon(
-                      RemixIcons.calendar_line,
-                      color: AppColors.themeColorLight,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10.h),
-              Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => SizedBox(height: 8.h),
-                  itemCount: 5 + 1,
-                  itemBuilder: (context, index) => index == 5
-                      ? SizedBox(height: 20.h)
-                      : GestureDetector(
-                          onTap: () => context.push(
-                            ShiftDetailsView(isScheduleDetails: true, id: 0),
-                          ),
-                          child: ShiftCardWidget(
-                            title: 'Sunrise Care Center',
-                            location: 'Atlanta, GA',
-                            date: 'May 20, 2026',
-                            time: '7:00 AM - 3:00 PM',
-                            status: provider.getStatus() == 'Upcoming'
-                                ? ''
-                                : provider.getStatus(),
-                            ratePerHour: '\$58/hr',
-                            image: AppAssets.hospitalImage,
+                    SizedBox(height: 20.h),
+                    Row(
+                      mainAxisAlignment: .spaceBetween,
+                      children: [
+                        Text(
+                          '${provider.getStatus()} Shifts (${provider.count}) ',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: .w700,
+                            color: AppColors.themeColorLight,
                           ),
                         ),
+                        IconButton(
+                          onPressed: () {
+                            showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime.now().add(
+                                const Duration(days: 365),
+                              ),
+                            );
+                          },
+                          icon: Icon(
+                            RemixIcons.calendar_line,
+                            color: AppColors.themeColorLight,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10.h),
+                    Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () => _initialize(),
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 8.h),
+                          itemCount: provider.schedules.length + 1,
+                          itemBuilder: (context, index) => provider.count == 0
+                              ? Center(child: Text('No Schedule Found'))
+                              : index == provider.schedules.length
+                              ? PaginationWidget(
+                                  totalPages: provider.totalPages,
+                                  fetchPreviousPage: provider.fetchPreviousPage,
+                                  fetchNextPage: provider.fetchNextPage,
+                                )
+                              : GestureDetector(
+                                  onTap: () => context.push(
+                                    ShiftDetailsView(
+                                      isScheduleDetails: true,
+                                      id: provider.schedules[index].shift!.id!,
+                                    ),
+                                  ),
+                                  child: ShiftCardWidget(
+                                    title:
+                                        provider
+                                            .schedules[index]
+                                            .shift!
+                                            .facility
+                                            .name ??
+                                        '',
+                                    location:
+                                        provider
+                                            .schedules[index]
+                                            .shift!
+                                            .facility
+                                            .address ??
+                                        '',
+                                    date: formatDate(
+                                      provider
+                                              .schedules[index]
+                                              .shift!
+                                              .shiftDate ??
+                                          '1999-9-9',
+                                    ),
+                                    time:
+                                        '${formatTime(provider.schedules[index].shift!.startTime ?? '0:0:0')} - ${formatTime(provider.schedules[index].shift!.endTime ?? '0:0:0')}',
+                                    status: provider.getStatus() == 'Upcoming'
+                                        ? ''
+                                        : provider.getStatus(),
+                                    ratePerHour:
+                                        '${provider.schedules[index].shift!.payRate}',
+                                    image:
+                                        provider
+                                            .schedules[index]
+                                            .shift!
+                                            .facility
+                                            .image ??
+                                        '',
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );

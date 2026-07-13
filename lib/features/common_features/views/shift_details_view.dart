@@ -14,7 +14,6 @@ import 'package:staffing/features/common_features/widgets/read_more_text_widget.
 import 'package:staffing/features/message_features/views/chat_view.dart';
 import 'package:staffing/features/schedule_features/view_models/schedule_view_model.dart';
 import 'package:staffing/features/shift_features/models/shift_detail_response.dart';
-import 'package:staffing/features/shift_features/services/favourite_service.dart';
 import 'package:staffing/features/shift_features/view_models/shift_view_model.dart';
 import 'package:staffing/features/shift_features/views/shift_confirmation_view.dart';
 

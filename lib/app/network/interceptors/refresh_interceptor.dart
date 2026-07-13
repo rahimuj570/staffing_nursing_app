@@ -62,7 +62,7 @@ class RefreshInterceptor extends Interceptor {
 
       final response = await refreshDio.post(
         "${UrlList.baseUrl}${UrlList.refrteshToken}",
-        data: {"refresh_token": refreshToken},
+        data: {"refresh": refreshToken},
       );
 
       if (response.statusCode == 200) {
@@ -72,7 +72,9 @@ class RefreshInterceptor extends Interceptor {
 
         return true;
       }
-    } catch (_) {}
+    } catch (e) {
+      print(e.toString());
+    }
 
     return false;
   }

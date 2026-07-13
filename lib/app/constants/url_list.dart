@@ -22,4 +22,8 @@ class UrlList {
   static const String shifts = '/api/v1/shifts/search/';
   static String shiftDetail(int id) => '/api/v1/shifts/$id/';
   static String bookShift(int id) => '/api/v1/shifts/$id/book/';
+
+  static const String sceduleUpcoming = '/api/v1/shifts/schedule/upcoming/';
+  static const String sceduleCompleted = '/api/v1/shifts/schedule/past/';
+  static const String sceduleCancelled = '/api/v1/shifts/schedule/cancelled/';
 }
