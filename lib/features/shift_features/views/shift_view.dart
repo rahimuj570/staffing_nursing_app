@@ -135,7 +135,7 @@ class _ShiftViewState extends State<ShiftView> {
                                         )
                                       : GestureDetector(
                                           onTap: () => context.push(
-                                            ShiftDetailsView(id: 0),
+                                            ShiftDetailsView(id: model.id),
                                           ),
                                           child: ShiftCardWidget(
                                             title: model.facility.name ?? 'N/A',
@@ -149,7 +149,7 @@ class _ShiftViewState extends State<ShiftView> {
                                             status: model.profession ?? 'N/A',
                                             ratePerHour:
                                                 model.payRate ?? '0.00',
-                                            image: AppAssets.hospitalImage,
+                                            image: model.facility.image ?? '',
                                           ),
                                         );
                                 },

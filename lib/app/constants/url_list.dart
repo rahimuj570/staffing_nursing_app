@@ -20,5 +20,5 @@ class UrlList {
   static const String homeData = '/api/v1/nurses/me/dashboard/';
 
   static const String shifts = '/api/v1/shifts/search/';
-  static String shiftDetail(String id) => '/api/v1/shifts/$id/';
+  static String shiftDetail(int id) => '/api/v1/shifts/$id/';
 }

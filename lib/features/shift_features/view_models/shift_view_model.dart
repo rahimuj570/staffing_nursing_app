@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/network/api_service.dart';
 import 'package:staffing/app/network/network_response_model.dart';
+import 'package:staffing/features/shift_features/models/shift_detail_response.dart';
 import 'package:staffing/features/shift_features/models/shift_response_model.dart';
 
 class ShiftViewModel extends ChangeNotifier {
@@ -15,6 +16,8 @@ class ShiftViewModel extends ChangeNotifier {
   bool isFilteredResult = false;
   int totalPages = 1;
 
+  ////////////////////////////FETCH SHIFTS////////////////////////////
+  ///
   Future<void> fetchShifts() async {
     isFilteredResult = false;
     next = null;
@@ -34,6 +37,8 @@ class ShiftViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  ////////////////////////////FETCH NEXT PAGE////////////////////////////
+  ///
   Future<void> fetchNextPage() async {
     _isLoading = true;
     notifyListeners();
@@ -54,6 +59,8 @@ class ShiftViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  ////////////////////////////FETCH NEXT PAGE////////////////////////////
+  ///
   Future<void> fetchPreviousPage() async {
     _isLoading = true;
     notifyListeners();
@@ -74,6 +81,8 @@ class ShiftViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  //////////////////////////SEARCH SHIFTS////////////////////////
+  ///
   Future<NetworkResponseModel> searchShifts({
     String? facility,
     double? lat,
@@ -120,5 +129,21 @@ class ShiftViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
     return responseModel;
+  }
+
+  ShiftDetailResponse? shiftDetailResponse;
+  Future<void> fetchShiftDetail(int id) async {
+    _isLoading = true;
+    notifyListeners();
+    NetworkResponseModel responseModel = await ApiService.get(
+      UrlList.shiftDetail(id),
+    );
+    if (responseModel.isSuccess) {
+      shiftDetailResponse = ShiftDetailResponse.fromJson(
+        responseModel.responseData['data'],
+      );
+    }
+    _isLoading = false;
+    notifyListeners();
   }
 }

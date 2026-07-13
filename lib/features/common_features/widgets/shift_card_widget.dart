@@ -38,7 +38,17 @@ class ShiftCardWidget extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
-                child: Image.asset(image, fit: BoxFit.cover),
+                child: Image.network(
+                  width: 120.w,
+                  image,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      Icon(Icons.error),
+                  loadingBuilder: (context, child, loadingProgress) =>
+                      loadingProgress == null
+                      ? child
+                      : Center(child: CircularProgressIndicator()),
+                ),
               ),
             ),
             SizedBox(width: 8.w),

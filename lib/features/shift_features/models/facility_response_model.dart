@@ -12,6 +12,7 @@
 class FacilityResponseModel {
   int? id;
   String? name;
+  String? image;
   String? address;
   String? city;
   String? state;
@@ -19,6 +20,7 @@ class FacilityResponseModel {
   String? longitude;
 
   FacilityResponseModel({
+    this.image,
     this.id,
     this.name,
     this.address,
@@ -29,6 +31,7 @@ class FacilityResponseModel {
   });
 
   FacilityResponseModel.fromJson(Map<String, dynamic> json) {
+    image = json['image'];
     id = json['id'];
     name = json['name'];
     address = json['address'];
