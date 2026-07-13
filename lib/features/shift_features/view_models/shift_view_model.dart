@@ -4,6 +4,7 @@ import 'package:staffing/app/network/api_service.dart';
 import 'package:staffing/app/network/network_response_model.dart';
 import 'package:staffing/features/shift_features/models/shift_detail_response.dart';
 import 'package:staffing/features/shift_features/models/shift_response_model.dart';
+import 'package:staffing/features/shift_features/services/favourite_service.dart';
 
 class ShiftViewModel extends ChangeNotifier {
   bool _isLoading = false;
@@ -131,6 +132,8 @@ class ShiftViewModel extends ChangeNotifier {
     return responseModel;
   }
 
+  ////////////////////////////SHIFT DETAIL////////////////////////////
+  ///
   ShiftDetailResponse? shiftDetailResponse;
   Future<void> fetchShiftDetail(int id) async {
     _isLoading = true;
@@ -143,7 +146,31 @@ class ShiftViewModel extends ChangeNotifier {
         responseModel.responseData['data'],
       );
     }
+    isFavourite = await FavoriteShiftService.isFavorite(id);
     _isLoading = false;
+    notifyListeners();
+  }
+
+  bool isBooking = false;
+  Future<NetworkResponseModel> bookShift(int id) async {
+    isBooking = true;
+    notifyListeners();
+    NetworkResponseModel respoponseModel = await ApiService.post(
+      UrlList.bookShift(id),
+    );
+
+    isBooking = false;
+    notifyListeners();
+
+    return respoponseModel;
+  }
+
+  //////////////////////////////////////FAVOURITE////////////////////////////
+  ///
+  bool isFavourite = false;
+  Future<void> toggleFavourite(int id) async {
+    await FavoriteShiftService.toggleFavorite(shiftDetailResponse!);
+    isFavourite = await FavoriteShiftService.isFavorite(id);
     notifyListeners();
   }
 }

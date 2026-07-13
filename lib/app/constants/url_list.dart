@@ -21,4 +21,5 @@ class UrlList {
 
   static const String shifts = '/api/v1/shifts/search/';
   static String shiftDetail(int id) => '/api/v1/shifts/$id/';
+  static String bookShift(int id) => '/api/v1/shifts/$id/book/';
 }

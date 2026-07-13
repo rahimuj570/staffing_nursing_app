@@ -14,9 +14,9 @@ import 'package:staffing/features/common_features/widgets/read_more_text_widget.
 import 'package:staffing/features/message_features/views/chat_view.dart';
 import 'package:staffing/features/schedule_features/view_models/schedule_view_model.dart';
 import 'package:staffing/features/shift_features/models/shift_detail_response.dart';
+import 'package:staffing/features/shift_features/services/favourite_service.dart';
 import 'package:staffing/features/shift_features/view_models/shift_view_model.dart';
 import 'package:staffing/features/shift_features/views/shift_confirmation_view.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class ShiftDetailsView extends StatefulWidget {
   final bool isScheduleDetails;
@@ -51,7 +51,7 @@ class _ShiftDetailsViewState extends State<ShiftDetailsView> {
       appBar: AppBar(title: Text('Shift Details')),
       body: Consumer<ShiftViewModel>(
         builder: (context, provider, child) {
-          if (provider.isLoading) {
+          if (provider.isLoading || provider.shiftDetailResponse == null) {
             return const Center(child: CircularProgressIndicator());
           } else {
             ShiftDetailResponse shiftDetailResponse =
@@ -59,7 +59,7 @@ class _ShiftDetailsViewState extends State<ShiftDetailsView> {
             return Padding(
               padding: .symmetric(horizontal: 20.0.w),
               child: RefreshIndicator(
-                onRefresh: () => _initialized(),
+                onRefresh: () async => await _initialized(),
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   child: SafeArea(
@@ -418,17 +418,26 @@ class _ShiftDetailsViewState extends State<ShiftDetailsView> {
                         if (widget.isScheduleDetails == false)
                           Row(
                             children: [
-                              Container(
-                                width: 48.w,
-                                height: 48.h,
-                                decoration: BoxDecoration(
-                                  borderRadius: .circular(12.r),
-                                  border: .all(color: AppColors.themeColor),
-                                ),
-                                child: Icon(
-                                  Icons.favorite_border_rounded,
-                                  color: AppColors.themeColor,
-                                  size: 26.r,
+                              GestureDetector(
+                                onTap: () async {
+                                  provider.toggleFavourite(
+                                    shiftDetailResponse.id!,
+                                  );
+                                },
+                                child: Container(
+                                  width: 48.w,
+                                  height: 48.h,
+                                  decoration: BoxDecoration(
+                                    borderRadius: .circular(12.r),
+                                    border: .all(color: AppColors.themeColor),
+                                  ),
+                                  child: Icon(
+                                    provider.isFavourite
+                                        ? Icons.favorite_rounded
+                                        : Icons.favorite_border_rounded,
+                                    color: AppColors.themeColor,
+                                    size: 26.r,
+                                  ),
                                 ),
                               ),
                               SizedBox(width: 8.w),
@@ -436,7 +445,11 @@ class _ShiftDetailsViewState extends State<ShiftDetailsView> {
                                 child: customElevatedButtonWidget(
                                   text: 'I want this Shift',
                                   onTapped: () {
-                                    context.push(ShiftConfirmationView());
+                                    context.push(
+                                      ShiftConfirmationView(
+                                        response: shiftDetailResponse,
+                                      ),
+                                    );
                                   },
                                 ),
                               ),
@@ -524,6 +537,7 @@ class ShiftInformationTileWidget extends StatelessWidget {
             Expanded(
               child: Text(
                 subtitle,
+                textAlign: .end,
                 style: TextStyle(fontSize: 12.sp, fontWeight: .w500),
               ),
             ),

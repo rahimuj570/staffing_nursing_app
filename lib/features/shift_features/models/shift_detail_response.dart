@@ -35,6 +35,7 @@
 import 'package:staffing/features/shift_features/models/facility_response_model.dart';
 
 class ShiftDetailResponse {
+  final int? id;
   final FacilityResponseModel facility;
   final String? profession;
   final String? department;
@@ -79,6 +80,7 @@ class ShiftDetailResponse {
     required this.dressCode,
     required this.notes,
     required this.createdAt,
+    this.id,
   });
 
   factory ShiftDetailResponse.fromJson(Map<String, dynamic> json) {
@@ -104,6 +106,32 @@ class ShiftDetailResponse {
       dressCode: json['dress_code'],
       notes: json['notes'],
       createdAt: json['created_at'],
+      id: json['id'],
     );
   }
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'id': id,
+    'facility': facility.toJson(),
+    'profession': profession,
+    'department': department,
+    'shift_date': shiftDate,
+    'start_time': startTime,
+    'end_time': endTime,
+    'shift_type': shiftType,
+    'pay_rate': payRate,
+    'pay_frequency': payFrequency,
+    'estimated_pay': estimatedPay,
+    'openings_left': openingsLeft,
+    'distance_km': distanceKm,
+    'status': status,
+    'required_nurses': requiredNurses,
+    'assignment_type': assignmentType,
+    'patient_ratio': patientRatio,
+    'mandatory_float': mandatoryFloat,
+    'experience_required_years': experienceRequiredYears,
+    'dress_code': dressCode,
+    'notes': notes,
+    'created_at': createdAt,
+  };
 }

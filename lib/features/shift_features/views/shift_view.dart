@@ -7,6 +7,7 @@ import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/utils/format_date_util.dart';
 import 'package:staffing/app/utils/format_time_util.dart';
+import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
 import 'package:staffing/features/common_features/views/shift_details_view.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_text_field_widget.dart';
@@ -43,7 +44,12 @@ class _ShiftViewState extends State<ShiftView> {
 
   Future<void> _initialized() async {
     searchTEC.clear();
-    await context.read<ShiftViewModel>().fetchShifts();
+    await context.read<ShiftViewModel>().searchShifts(
+      profession: context
+          .read<LoginViewModel>()
+          .nurseProfileMeResponseModel
+          ?.nurseType,
+    );
   }
 
   @override

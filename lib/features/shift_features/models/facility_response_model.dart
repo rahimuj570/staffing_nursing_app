@@ -40,4 +40,17 @@ class FacilityResponseModel {
     latitude = json['latitude'];
     longitude = json['longitude'];
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['image'] = image;
+    data['id'] = id;
+    data['name'] = name;
+    data['address'] = address;
+    data['city'] = city;
+    data['state'] = state;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
+    return data;
+  }
 }
