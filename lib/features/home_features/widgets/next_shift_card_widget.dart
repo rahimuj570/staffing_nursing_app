@@ -87,12 +87,14 @@ class NextShiftCardWidget extends StatelessWidget {
                         color: AppColors.gold,
                       ),
                       SizedBox(width: 4.w),
-                      Text(
-                        facilityCity ?? 'N/A',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          fontWeight: .w600,
-                          color: AppColors.greyColor,
+                      Expanded(
+                        child: Text(
+                          facilityCity ?? 'N/A',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: .w600,
+                            color: AppColors.greyColor,
+                          ),
                         ),
                       ),
                     ],

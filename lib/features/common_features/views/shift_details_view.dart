@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_assets.dart';
@@ -7,8 +8,10 @@ import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/utils/format_date_util.dart';
 import 'package:staffing/app/utils/format_time_util.dart';
+import 'package:staffing/app/utils/get_current_lat_lang_util.dart';
 import 'package:staffing/app/utils/get_duration_from_date_range.dart';
 import 'package:staffing/app/utils/get_week_day_name.dart';
+import 'package:staffing/app/utils/show_status_snackbar_util.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/common_features/widgets/read_more_text_widget.dart';
 import 'package:staffing/features/message_features/views/chat_view.dart';
@@ -464,8 +467,29 @@ class _ShiftDetailsViewState extends State<ShiftDetailsView> {
                                   text: provider.isClockIn == true
                                       ? 'Clock Out'
                                       : 'Clock In',
-                                  onTapped: () {
-                                    provider.changeClockIn();
+                                  onTapped: () async {
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (context) => Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                    try {
+                                      Position positioned =
+                                          await getCurrentLatLng();
+                                      await provider.changeClockIn(
+                                        id: shiftDetailResponse.id!,
+                                        pos: positioned,
+                                      );
+                                    } catch (e) {
+                                      showStatusSnackbar(
+                                        context,
+                                        message: e.toString(),
+                                      );
+                                    } finally {
+                                      context.pop();
+                                    }
                                   },
                                 ),
                                 SizedBox(height: 12.h),

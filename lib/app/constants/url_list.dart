@@ -26,4 +26,12 @@ class UrlList {
   static const String sceduleUpcoming = '/api/v1/shifts/schedule/upcoming/';
   static const String sceduleCompleted = '/api/v1/shifts/schedule/past/';
   static const String sceduleCancelled = '/api/v1/shifts/schedule/cancelled/';
+  static String scheduleClockIn(int id) =>
+      '/api/v1/shifts/assignments/$id/clock-in/';
+  static String scheduleClockOut(int id) =>
+      '/api/v1/shifts/assignments/$id/clock-out/';
+  static String scheduleCancel(int id) =>
+      '/api/v1/shifts/assignments/$id/cancel/';
+
+  static const String settings = '/api/v1/settings/';
 }

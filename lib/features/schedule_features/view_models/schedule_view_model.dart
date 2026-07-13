@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/network/api_service.dart';
 import 'package:staffing/app/network/network_response_model.dart';
@@ -17,9 +18,28 @@ class ScheduleViewModel extends ChangeNotifier {
 
   /////FOR DEMO PURPOSE
   bool isClockIn = false;
+  bool isClockChanging = false;
+  Future<void> changeClockIn({required int id, required Position pos}) async {
+    isClockChanging = true;
+    notifyListeners();
 
-  void changeClockIn() {
+    if (isClockIn) {
+      await ApiService.post(
+        UrlList.scheduleClockIn(id),
+        data: {
+          {"latitude": pos.latitude, "longitude": pos.longitude},
+        },
+      );
+    } else {
+      await ApiService.post(
+        UrlList.scheduleClockOut(id),
+        data: {
+          {"latitude": pos.latitude, "longitude": pos.longitude},
+        },
+      );
+    }
     isClockIn = !isClockIn;
+    isClockChanging = false;
     notifyListeners();
   }
 

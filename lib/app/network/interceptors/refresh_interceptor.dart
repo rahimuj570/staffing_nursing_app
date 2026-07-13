@@ -59,6 +59,7 @@ class RefreshInterceptor extends Interceptor {
       }
 
       final refreshDio = DioClient.createRefreshDio();
+      refreshDio.interceptors.add(LogInterceptor());
 
       final response = await refreshDio.post(
         "${UrlList.baseUrl}${UrlList.refrteshToken}",
@@ -73,7 +74,7 @@ class RefreshInterceptor extends Interceptor {
         return true;
       }
     } catch (e) {
-      print(e.toString());
+      print('refressssssssssssssss ${e.toString()}');
     }
 
     return false;
