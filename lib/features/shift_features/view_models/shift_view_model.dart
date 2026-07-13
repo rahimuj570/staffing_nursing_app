@@ -13,6 +13,7 @@ class ShiftViewModel extends ChangeNotifier {
   String? next;
   String? previous;
   bool isFilteredResult = false;
+  int totalPages = 1;
 
   Future<void> fetchShifts() async {
     isFilteredResult = false;
@@ -27,6 +28,47 @@ class ShiftViewModel extends ChangeNotifier {
           .toList();
       next = responseModel.responseData['meta']['next'];
       previous = responseModel.responseData['meta']['previous'];
+      totalPages = responseModel.responseData['meta']['total_pages'];
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchNextPage() async {
+    _isLoading = true;
+    notifyListeners();
+    NetworkResponseModel responseModel = await ApiService.get(next!);
+    if (responseModel.isSuccess) {
+      shiftResponseModel!.addAll(
+        responseModel.responseData['data']
+            .map<ShiftResponseModel>(
+              (json) => ShiftResponseModel.fromJson(json),
+            )
+            .toList(),
+      );
+      next = responseModel.responseData['meta']['next'];
+      previous = responseModel.responseData['meta']['previous'];
+      totalPages = responseModel.responseData['meta']['total_pages'];
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchPreviousPage() async {
+    _isLoading = true;
+    notifyListeners();
+    NetworkResponseModel responseModel = await ApiService.get(previous!);
+    if (responseModel.isSuccess) {
+      shiftResponseModel!.addAll(
+        responseModel.responseData['data']
+            .map<ShiftResponseModel>(
+              (json) => ShiftResponseModel.fromJson(json),
+            )
+            .toList(),
+      );
+      next = responseModel.responseData['meta']['next'];
+      previous = responseModel.responseData['meta']['previous'];
+      totalPages = responseModel.responseData['meta']['total_pages'];
     }
     _isLoading = false;
     notifyListeners();

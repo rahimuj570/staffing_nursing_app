@@ -10,6 +10,7 @@ import 'package:staffing/app/utils/format_time_util.dart';
 import 'package:staffing/features/common_features/views/shift_details_view.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_text_field_widget.dart';
+import 'package:staffing/features/common_features/widgets/pagination_widget.dart';
 import 'package:staffing/features/common_features/widgets/shift_card_widget.dart';
 import 'package:staffing/features/shift_features/models/shift_response_model.dart';
 import 'package:staffing/features/shift_features/view_models/shift_view_model.dart';
@@ -116,13 +117,22 @@ class _ShiftViewState extends State<ShiftView> {
                                 separatorBuilder: (context, index) =>
                                     SizedBox(height: 10.h),
                                 itemCount:
-                                    provider.shiftResponseModel?.length ??
-                                    0 + 1,
+                                    (provider.shiftResponseModel?.length ?? 0) +
+                                    1,
                                 itemBuilder: (context, index) {
-                                  ShiftResponseModel model =
-                                      provider.shiftResponseModel![index];
-                                  return index == 10
-                                      ? Center(child: SizedBox(height: 20.h))
+                                  late ShiftResponseModel model;
+                                  if (index !=
+                                      provider.shiftResponseModel!.length) {
+                                    model = provider.shiftResponseModel![index];
+                                  }
+                                  return index ==
+                                          provider.shiftResponseModel!.length
+                                      ? PaginationWidget(
+                                          totalPages: provider.totalPages,
+                                          fetchPreviousPage:
+                                              provider.fetchPreviousPage,
+                                          fetchNextPage: provider.fetchNextPage,
+                                        )
                                       : GestureDetector(
                                           onTap: () => context.push(
                                             ShiftDetailsView(id: 0),
