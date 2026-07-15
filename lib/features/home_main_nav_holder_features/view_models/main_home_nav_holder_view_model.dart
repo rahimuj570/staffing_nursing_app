@@ -21,9 +21,9 @@ class MainHomeNavHolderViewModel extends ChangeNotifier {
         return ShiftView();
       case 2:
         return ScheduleView();
-      case 3:
-        return MessageView();
       case 4:
+        return MessageView();
+      case 3:
         return MyProfileView();
       default:
         return const Center(child: Text('No Screen'));

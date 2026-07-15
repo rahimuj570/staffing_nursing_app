@@ -7,7 +7,6 @@ import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/network/network_response_model.dart';
 import 'package:staffing/app/utils/format_date_util.dart';
 import 'package:staffing/app/utils/format_time_util.dart';
-import 'package:staffing/app/utils/show_status_snackbar_util.dart';
 import 'package:staffing/features/common_features/views/shift_details_view.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/shift_features/models/shift_detail_response.dart';
@@ -131,13 +130,6 @@ class ShiftConfirmationView extends StatelessWidget {
                           if (responseModel.isSuccess) {
                             context.pushReplacement(
                               ShiftAcceptedSuccessfullView(response: response),
-                            );
-                          } else {
-                            showStatusSnackbar(
-                              context,
-                              message:
-                                  responseModel.message ?? 'Failed to book!',
-                              type: .error,
                             );
                           }
                         },

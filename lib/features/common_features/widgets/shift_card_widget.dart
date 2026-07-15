@@ -100,6 +100,7 @@ class ShiftCardWidget extends StatelessWidget {
                         child: Text(
                           location,
                           style: TextStyle(
+                            overflow: .ellipsis,
                             fontSize: 12.sp,
                             fontWeight: .w600,
                             color: AppColors.greyColor,

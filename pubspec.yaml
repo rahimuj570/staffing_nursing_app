@@ -51,6 +51,7 @@ dependencies:
   fluttertoast: ^9.1.0
   geolocator: ^14.0.2
   geocoding: ^5.0.0
+  webview_flutter: ^4.14.1
 
 dev_dependencies:
   flutter_test:

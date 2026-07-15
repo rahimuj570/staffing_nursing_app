@@ -117,10 +117,10 @@ class _HomeMainNavHolderViewState extends State<HomeMainNavHolderView> {
                       icon: Icon(RemixIcons.calendar_line),
                       label: 'Schedule',
                     ),
-                    BottomNavigationBarItem(
-                      icon: Icon(RemixIcons.mail_line),
-                      label: 'Messages',
-                    ),
+                    // BottomNavigationBarItem(
+                    //   icon: Icon(RemixIcons.mail_line),
+                    //   label: 'Messages',
+                    // ),
                     BottomNavigationBarItem(
                       icon: Icon(RemixIcons.account_circle_2_line),
                       label: 'Profile',

@@ -11,6 +11,7 @@
 //     "linkedin": "https://www.pyp.com",
 //     "youtube": "https://www.duzuzixebuzaj.co",
 //     "updated_at": "2026-07-12T02:59:36.651813Z"
+// "twkto_chat_link": "https://tawk.to/chat/6a5718aabc53df1d490a90ef/1jti3gn6o",
 //   }
 
 class MyProfileResponseModel {
@@ -26,6 +27,7 @@ class MyProfileResponseModel {
   final String? linkedin;
   final String? youtube;
   final String? updatedAt;
+  final String? twktoChatLink;
 
   MyProfileResponseModel({
     this.termsAndConditions,
@@ -40,6 +42,7 @@ class MyProfileResponseModel {
     this.linkedin,
     this.youtube,
     this.updatedAt,
+    this.twktoChatLink,
   });
 
   factory MyProfileResponseModel.fromJson(Map<String, dynamic> json) {
@@ -56,6 +59,7 @@ class MyProfileResponseModel {
       linkedin: json['linkedin'],
       youtube: json['youtube'],
       updatedAt: json['updated_at'],
+      twktoChatLink: json['twkto_chat_link'],
     );
   }
 }
