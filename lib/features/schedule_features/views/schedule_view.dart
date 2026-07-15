@@ -33,8 +33,8 @@ class _ScheduleViewState extends State<ScheduleView>
     _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
   }
 
-  Future<void> _initialize() async {
-    await context.read<ScheduleViewModel>().fetchSchedule();
+  Future<void> _initialize({DateTime? date}) async {
+    await context.read<ScheduleViewModel>().fetchSchedule(date: date);
   }
 
   @override
@@ -75,8 +75,8 @@ class _ScheduleViewState extends State<ScheduleView>
                           ),
                         ),
                         IconButton(
-                          onPressed: () {
-                            showDatePicker(
+                          onPressed: () async {
+                            DateTime? date = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime.now(),
@@ -84,9 +84,13 @@ class _ScheduleViewState extends State<ScheduleView>
                                 const Duration(days: 365),
                               ),
                             );
+
+                            await _initialize(date: date);
                           },
                           icon: Icon(
-                            RemixIcons.calendar_line,
+                            provider.isDateFiltered
+                                ? RemixIcons.calendar_check_line
+                                : RemixIcons.calendar_line,
                             color: AppColors.themeColorLight,
                           ),
                         ),

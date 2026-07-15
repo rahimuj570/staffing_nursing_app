@@ -68,16 +68,23 @@ class ScheduleViewModel extends ChangeNotifier {
   ///
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool isDateFiltered = false;
   List<SceduleResponseModel> schedules = [];
   String? next;
   String? previous;
   int totalPages = 1;
   int count = 0;
-  Future<void> fetchSchedule() async {
+  Future<void> fetchSchedule({DateTime? date}) async {
+    isDateFiltered = date != null;
     schedules = [];
     _isLoading = true;
     notifyListeners();
-    NetworkResponseModel responseModel = await ApiService.get(_urls[tabIndex]);
+    NetworkResponseModel responseModel = await ApiService.get(
+      _urls[tabIndex],
+      queryParameters: date != null
+          ? {'date': date.toString().split(' ')[0]}
+          : null,
+    );
     if (responseModel.isSuccess) {
       schedules = responseModel.responseData['data']
           .map<SceduleResponseModel>(
