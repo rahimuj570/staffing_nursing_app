@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/network/api_service.dart';
@@ -22,5 +25,35 @@ class MyProfileViewModel extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  //////////////////////EDIT NURSE PROFILE/////////////
+  ///
+  Future<NetworkResponseModel> editNurseProfile({
+    File? image,
+    String? name,
+    String? phone,
+    String? address,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    FormData formData = FormData.fromMap({
+      'name': name,
+      'phone': phone,
+      'address': address,
+    });
+    if (image != null) {
+      formData.files.add(
+        MapEntry('profile_picture', await MultipartFile.fromFile(image.path)),
+      );
+    }
+    NetworkResponseModel responseModel = await ApiService.patch(
+      UrlList.profileUpdate,
+      data: formData,
+      options: Options(headers: {"Content-Type": "multipart/form-data"}),
+    );
+    _isLoading = false;
+    notifyListeners();
+    return responseModel;
   }
 }

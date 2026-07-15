@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
-import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
+import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/services/auth_prefs_service.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
@@ -47,7 +47,9 @@ class _MyProfileViewState extends State<MyProfileView> {
       body: Padding(
         padding: .all(20.0.r),
         child: RefreshIndicator(
-          onRefresh: () => _initialize(),
+          onRefresh: () {
+            return _initialize();
+          },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
@@ -72,9 +74,15 @@ class _MyProfileViewState extends State<MyProfileView> {
                             ),
                             child: ClipRRect(
                               borderRadius: .circular(50.r),
-                              child: Image.asset(
-                                AppAssets.nurseDp,
+                              child: Image.network(
+                                '${UrlList.baseUrl}${context.read<LoginViewModel>().currentUser?.profilePicture}',
                                 fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Icon(
+                                      Icons.error,
+                                      size: 40.r,
+                                      color: Colors.grey,
+                                    ),
                               ),
                             ),
                           ),
@@ -265,7 +273,12 @@ class _MyProfileViewState extends State<MyProfileView> {
                           icon: RemixIcons.user_settings_line,
                           title: 'Profile Information',
                           onTap: () {
-                            context.push(ProfileInformationView());
+                            context.push(
+                              ProfileInformationView(),
+                              then: (value) async {
+                                // await _initialize();
+                              },
+                            );
                           },
                         ),
                         Padding(

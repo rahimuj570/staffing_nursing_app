@@ -1,4 +1,7 @@
 // {
+// "name": "string",
+//   "phone": "string",
+//   "profile_picture": "string",
 //     "address": "qdwqd",
 //     "nurse_type": "CNA",
 //     "years_of_experience": 2,
@@ -27,6 +30,9 @@
 import 'package:staffing/features/auth_features/models/document_response_model.dart';
 
 class NurseProfileMeResponseModel {
+  String? name;
+  String? phone;
+  String? profilePicture;
   String? address;
   String? nurseType;
   int? yearsOfExperience;
@@ -36,6 +42,9 @@ class NurseProfileMeResponseModel {
   String? submittedAt;
 
   NurseProfileMeResponseModel({
+    this.name,
+    this.phone,
+    this.profilePicture,
     this.address,
     this.nurseType,
     this.yearsOfExperience,
@@ -46,6 +55,9 @@ class NurseProfileMeResponseModel {
   });
 
   NurseProfileMeResponseModel.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    phone = json['phone'];
+    profilePicture = json['profile_picture'];
     address = json['address'];
     nurseType = json['nurse_type'];
     yearsOfExperience = json['years_of_experience'];
