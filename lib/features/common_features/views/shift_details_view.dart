@@ -6,6 +6,7 @@ import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/network/network_response_model.dart';
 import 'package:staffing/app/utils/format_date_util.dart';
 import 'package:staffing/app/utils/format_time_util.dart';
 import 'package:staffing/app/utils/get_current_lat_lang_util.dart';
@@ -23,10 +24,17 @@ import 'package:staffing/features/shift_features/views/shift_confirmation_view.d
 class ShiftDetailsView extends StatefulWidget {
   final bool isScheduleDetails;
   final int id;
+
+  /////////////for schedule
+  final String? status;
+
+  final int? assignmentId;
   const ShiftDetailsView({
     super.key,
     this.isScheduleDetails = false,
     required this.id,
+    this.assignmentId,
+    this.status,
   });
 
   @override
@@ -445,26 +453,35 @@ class _ShiftDetailsViewState extends State<ShiftDetailsView> {
                               SizedBox(width: 8.w),
                               Expanded(
                                 child: customElevatedButtonWidget(
-                                  text: 'I want this Shift',
-                                  onTapped: () {
-                                    context.push(
-                                      ShiftConfirmationView(
-                                        response: shiftDetailResponse,
-                                      ),
-                                    );
-                                  },
+                                  text:
+                                      provider.shiftDetailResponse?.status ==
+                                          'OPEN'
+                                      ? 'I want this Shift'
+                                      : 'Closed',
+                                  onTapped:
+                                      provider.shiftDetailResponse?.status !=
+                                          'OPEN'
+                                      ? null
+                                      : () {
+                                          context.push(
+                                            ShiftConfirmationView(
+                                              response: shiftDetailResponse,
+                                            ),
+                                          );
+                                        },
                                 ),
                               ),
                             ],
                           ),
 
-                        if (widget.isScheduleDetails == true)
+                        if (widget.isScheduleDetails == true &&
+                            widget.status == 'ACCEPTED')
                           Consumer<ScheduleViewModel>(
                             builder: (context, provider, child) => Column(
                               children: [
                                 customElevatedButtonWidget(
                                   icon: Icons.watch_later_outlined,
-                                  text: provider.isClockIn == true
+                                  text: provider.isClockIn
                                       ? 'Clock Out'
                                       : 'Clock In',
                                   onTapped: () async {
@@ -478,10 +495,18 @@ class _ShiftDetailsViewState extends State<ShiftDetailsView> {
                                     try {
                                       Position positioned =
                                           await getCurrentLatLng();
-                                      await provider.changeClockIn(
-                                        id: shiftDetailResponse.id!,
-                                        pos: positioned,
-                                      );
+
+                                      if (!provider.isClockIn) {
+                                        await provider.changeClockIn(
+                                          id: widget.assignmentId!,
+                                          pos: positioned,
+                                        );
+                                      } else {
+                                        await provider.changeClockOut(
+                                          id: widget.assignmentId!,
+                                          pos: positioned,
+                                        );
+                                      }
                                     } catch (e) {
                                       showStatusSnackbar(
                                         context,
@@ -493,15 +518,39 @@ class _ShiftDetailsViewState extends State<ShiftDetailsView> {
                                   },
                                 ),
                                 SizedBox(height: 12.h),
-                                customElevatedButtonWidget(
-                                  icon: Icons.close,
-                                  backgroundColor: Colors.white,
-                                  forgroundColor: AppColors.themeColor,
-                                  borderColor: AppColors.themeColor,
-                                  text: 'Cancel The Shift',
-                                  onTapped: () {
-                                    context.pop();
-                                  },
+                                Visibility(
+                                  visible: provider.isLoading == false,
+                                  replacement: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  child: customElevatedButtonWidget(
+                                    icon: Icons.close,
+                                    backgroundColor: Colors.white,
+                                    forgroundColor: AppColors.themeColor,
+                                    borderColor: AppColors.themeColor,
+                                    text: 'Cancel The Shift',
+                                    onTapped: () async {
+                                      NetworkResponseModel responseModel =
+                                          await provider.cancelSchedule(
+                                            id: widget.assignmentId!,
+                                          );
+                                      if (responseModel.isSuccess) {
+                                        showStatusSnackbar(
+                                          context,
+                                          message:
+                                              "Successfully cancelled the shift",
+                                          type: .success,
+                                        );
+                                        context.pop();
+                                      } else {
+                                        showStatusSnackbar(
+                                          context,
+                                          message: "Failed to cancel the shift",
+                                          type: .error,
+                                        );
+                                      }
+                                    },
+                                  ),
                                 ),
                                 SizedBox(height: 12.h),
                                 customElevatedButtonWidget(

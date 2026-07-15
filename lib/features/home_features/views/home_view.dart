@@ -7,6 +7,7 @@ import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/services/auth_prefs_service.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
 import 'package:staffing/features/common_features/views/shift_details_view.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
@@ -64,6 +65,13 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    AuthPrefsService().getRefreshToken().then(
+      (value) => print('refreshsssssssssssssssssssssssss $value'),
+    );
+    AuthPrefsService().getToken().then(
+      (value) => print('accessshsssssssssssssssssssssssss $value'),
+    );
+
     return Scaffold(
       appBar: CustomAppBarWidget(),
       body: RefreshIndicator(
@@ -292,25 +300,15 @@ class _HomeViewState extends State<HomeView> {
                         itemBuilder: (context, index) {
                           HomeUpcomingShiftResponseModel? model =
                               responseModel.upcomingShifts?[index];
-                          return GestureDetector(
-                            onTap: () => context.push(
-                              ShiftDetailsView(
-                                isScheduleDetails: true,
-                                id:
-                                    responseModel.upcomingShifts?[index].id ??
-                                    0,
-                              ),
-                            ),
-                            child: NextShiftCardWidget(
-                              facilityName: model?.facilityName,
-                              facilityCity: model?.facilityCity,
-                              date: model?.shiftDate,
-                              startTime: model?.startTime,
-                              endTime: model?.endTime,
-                              status: model?.assignmentStatus,
-                              profession: model?.profession,
-                              facilityImage: model?.facilityImage,
-                            ),
+                          return NextShiftCardWidget(
+                            facilityName: model?.facilityName,
+                            facilityCity: model?.facilityCity,
+                            date: model?.shiftDate,
+                            startTime: model?.startTime,
+                            endTime: model?.endTime,
+                            status: model?.assignmentStatus,
+                            profession: model?.profession,
+                            facilityImage: model?.facilityImage,
                           );
                         },
                       ),
@@ -340,17 +338,17 @@ class _HomeViewState extends State<HomeView> {
                               '\$${responseModel.stats?.earningsThisWeek ?? 0}',
                           subtitle: 'Earnings This Week',
                         ),
-                        AtGlanceCardWidget(
-                          title:
-                              '${responseModel.stats?.documentsExpiringSoon ?? 0}',
-                          subtitle: 'Documents Expiring Soon',
-                        ),
-                        AtGlanceCardWidget(
-                          title: 'Compliant',
-                          subtitle: responseModel.stats?.isCompliant ?? false
-                              ? 'All Requirements Up to Date'
-                              : 'All Requirements Not Up to Date',
-                        ),
+                        // AtGlanceCardWidget(
+                        //   title:
+                        //       '${responseModel.stats?.documentsExpiringSoon ?? 0}',
+                        //   subtitle: 'Documents Expiring Soon',
+                        // ),
+                        // AtGlanceCardWidget(
+                        //   title: 'Compliant',
+                        //   subtitle: responseModel.stats?.isCompliant ?? false
+                        //       ? 'All Requirements Up to Date'
+                        //       : 'All Requirements Not Up to Date',
+                        // ),
                       ]),
                     ),
                     SizedBox(height: 20.h),

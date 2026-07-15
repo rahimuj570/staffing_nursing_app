@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 
 extension RouteExtension on BuildContext {
-  void push(Widget widget) =>
-      Navigator.push(this, MaterialPageRoute(builder: (context) => widget));
+  void push(Widget widget, {Function(dynamic value)? then}) =>
+      Navigator.push(
+        this,
+        MaterialPageRoute(builder: (context) => widget),
+      ).then(
+        then ??
+            (value) {
+              print('ssssssssssssssssssssssss back pop');
+            },
+      );
 
   void pushReplacement(Widget widget) => Navigator.pushReplacement(
     this,

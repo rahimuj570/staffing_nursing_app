@@ -75,10 +75,10 @@ class SceduleResponseModel {
               ),
         status: json['status'] as String?,
         assignedAt: json['assigned_at'] as String?,
-        activeClockLog: json['active_clock_log'] == null
+        activeClockLog: json['clock_log'] == null
             ? null
             : ActiveClockLogResponseModel.fromJson(
-                json['active_clock_log'] as Map<String, dynamic>,
+                json['clock_log'] as Map<String, dynamic>,
               ),
       );
 }

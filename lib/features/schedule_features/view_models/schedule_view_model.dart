@@ -16,29 +16,25 @@ class ScheduleViewModel extends ChangeNotifier {
   List<String> status = ['Upcoming', 'Completed', 'Cancelled'];
   String getStatus() => status[tabIndex];
 
-  /////FOR DEMO PURPOSE
+  ///////////////////CLOCK IN////////////////
+  ///
   bool isClockIn = false;
   bool isClockChanging = false;
   Future<void> changeClockIn({required int id, required Position pos}) async {
     isClockChanging = true;
     notifyListeners();
 
-    if (isClockIn) {
-      await ApiService.post(
-        UrlList.scheduleClockIn(id),
-        data: {
-          {"latitude": pos.latitude, "longitude": pos.longitude},
-        },
-      );
-    } else {
-      await ApiService.post(
-        UrlList.scheduleClockOut(id),
-        data: {
-          {"latitude": pos.latitude, "longitude": pos.longitude},
-        },
-      );
+    NetworkResponseModel response = await ApiService.post(
+      UrlList.scheduleClockIn(id),
+      data: {
+        "latitude": pos.latitude.toStringAsFixed(6),
+        "longitude": pos.longitude.toStringAsFixed(6),
+      },
+    );
+
+    if (response.isSuccess) {
+      isClockChanging = false;
     }
-    isClockIn = !isClockIn;
     isClockChanging = false;
     notifyListeners();
   }
@@ -48,6 +44,25 @@ class ScheduleViewModel extends ChangeNotifier {
     UrlList.sceduleCompleted,
     UrlList.sceduleCancelled,
   ];
+
+  ///////////////////CLOCK OUT/////////////////
+  ///
+  Future<void> changeClockOut({required int id, required Position pos}) async {
+    isClockChanging = true;
+    notifyListeners();
+    NetworkResponseModel response = await ApiService.post(
+      UrlList.scheduleClockOut(id),
+      data: {
+        "latitude": pos.latitude.toStringAsFixed(6),
+        "longitude": pos.longitude.toStringAsFixed(6),
+      },
+    );
+    if (response.isSuccess) {
+      isClockIn = false;
+    }
+    isClockChanging = false;
+    notifyListeners();
+  }
 
   ///////////////////FETCH SCHEDULES////////////////////////////
   ///
@@ -119,5 +134,18 @@ class ScheduleViewModel extends ChangeNotifier {
     }
     _isLoading = false;
     notifyListeners();
+  }
+
+  ///////////////////SCHEDULE CANCEL/////////////////
+  ///
+  Future<NetworkResponseModel> cancelSchedule({required int id}) async {
+    _isLoading = true;
+    notifyListeners();
+    NetworkResponseModel responseModel = await ApiService.post(
+      UrlList.scheduleCancel(id),
+    );
+    _isLoading = false;
+    notifyListeners();
+    return responseModel;
   }
 }

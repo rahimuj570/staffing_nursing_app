@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/network/dio_client.dart';
+import 'package:staffing/app/network/interceptors/logger_interceptor.dart';
 import 'package:staffing/app/services/auth_logout_event_bus.dart';
 import 'package:staffing/app/services/auth_prefs_service.dart';
 
@@ -52,14 +53,14 @@ class RefreshInterceptor extends Interceptor {
 
   Future<bool> _refreshToken() async {
     try {
-      final refreshToken = await AuthPrefsService().getRefreshToken();
+      String? refreshToken = await AuthPrefsService().getRefreshToken();
 
       if (refreshToken == null) {
         return false;
       }
 
       final refreshDio = DioClient.createRefreshDio();
-      refreshDio.interceptors.add(LogInterceptor());
+      refreshDio.interceptors.add(LoggerInterceptor());
 
       final response = await refreshDio.post(
         "${UrlList.baseUrl}${UrlList.refrteshToken}",
@@ -67,9 +68,11 @@ class RefreshInterceptor extends Interceptor {
       );
 
       if (response.statusCode == 200) {
-        await AuthPrefsService().saveToken(response.data["access"]);
+        await AuthPrefsService().saveToken(response.data["data"]["access"]);
 
-        await AuthPrefsService().saveRefreshToken(response.data["refresh"]);
+        await AuthPrefsService().saveRefreshToken(
+          response.data["data"]["refresh"],
+        );
 
         return true;
       }

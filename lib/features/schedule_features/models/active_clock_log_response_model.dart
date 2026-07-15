@@ -15,7 +15,7 @@ class ActiveClockLogResponseModel {
   final String? clockOutAt;
   final String? clockOutLatitude;
   final String? clockOutLongitude;
-  final int? hoursWorked;
+  final double? hoursWorked;
 
   ActiveClockLogResponseModel({
     this.id,

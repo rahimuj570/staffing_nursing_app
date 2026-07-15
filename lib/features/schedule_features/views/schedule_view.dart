@@ -109,12 +109,28 @@ class _ScheduleViewState extends State<ScheduleView>
                                   fetchNextPage: provider.fetchNextPage,
                                 )
                               : GestureDetector(
-                                  onTap: () => context.push(
-                                    ShiftDetailsView(
-                                      isScheduleDetails: true,
-                                      id: provider.schedules[index].shift!.id!,
-                                    ),
-                                  ),
+                                  onTap: () {
+                                    provider.isClockIn =
+                                        provider
+                                            .schedules[index]
+                                            .activeClockLog !=
+                                        null;
+                                    context.push(
+                                      ShiftDetailsView(
+                                        isScheduleDetails: true,
+                                        id: provider
+                                            .schedules[index]
+                                            .shift!
+                                            .id!,
+                                        assignmentId:
+                                            provider.schedules[index].id,
+                                        status:
+                                            provider.schedules[index].status,
+                                      ),
+                                      then: (value) async =>
+                                          await _initialize(),
+                                    );
+                                  },
                                   child: ShiftCardWidget(
                                     title:
                                         provider

@@ -115,11 +115,11 @@ class LoginViews extends StatelessWidget {
                                         password: passwordTEC.text.trim(),
                                       );
                                   if (responseModel.isSuccess) {
-                                    AuthPrefsService().saveToken(
+                                    await AuthPrefsService().saveToken(
                                       responseModel
                                           .responseData['data']['access'],
                                     );
-                                    AuthPrefsService().saveRefreshToken(
+                                    await AuthPrefsService().saveRefreshToken(
                                       responseModel
                                           .responseData['data']['refresh'],
                                     );
