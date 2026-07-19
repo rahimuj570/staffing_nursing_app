@@ -53,6 +53,9 @@ dependencies:
   geocoding: ^5.0.0
   webview_flutter: ^4.14.1
   mime: ^2.0.0
+  firebase_messaging: ^16.4.3
+  firebase_core: ^4.12.1
+  flutter_local_notifications: ^22.1.0
 
 dev_dependencies:
   flutter_test:

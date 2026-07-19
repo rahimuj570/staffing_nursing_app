@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "674313105890",
+    "project_id": "lac-staffing",
+    "storage_bucket": "lac-staffing.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674313105890:android:7ed4b4746eb31c095cc9bb",
+        "android_client_info": {
+          "package_name": "io.github.rahimuj570.staffing"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuRIpBpcsZW4pqh4fHeg533wekw3vcU8U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

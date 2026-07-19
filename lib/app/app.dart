@@ -19,6 +19,8 @@ import 'package:staffing/features/shift_features/view_models/shift_view_model.da
 import 'package:staffing/features/welcome_features/views/splash_view.dart';
 
 class MainAppScreen extends StatefulWidget {
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
   const MainAppScreen({super.key});
 
   @override
@@ -26,14 +28,13 @@ class MainAppScreen extends StatefulWidget {
 }
 
 class _MainAppScreenState extends State<MainAppScreen> {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   StreamSubscription? _logoutSubscription;
 
   @override
   void initState() {
     super.initState();
     _logoutSubscription = AuthLogoutEventBus.instance.stream.listen((event) {
-      navigatorKey.currentState?.pushAndRemoveUntil(
+      MainAppScreen.navigatorKey.currentState?.pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const LoginViews()),
         ((route) => false),
       );
@@ -67,7 +68,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (_, child) => MaterialApp(
-          navigatorKey: navigatorKey,
+          navigatorKey: MainAppScreen.navigatorKey,
           debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.light,
           theme: AppTheme.lightTheme(),

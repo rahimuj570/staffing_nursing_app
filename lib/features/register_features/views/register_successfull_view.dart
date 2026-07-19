@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
-import 'package:staffing/features/auth_features/views/login_views.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
+import 'package:staffing/features/home_main_nav_holder_features/views/home_main_nav_holder_view.dart';
 
 class RegisterSuccessfullView extends StatelessWidget {
   const RegisterSuccessfullView({super.key});
@@ -90,9 +90,9 @@ class RegisterSuccessfullView extends StatelessWidget {
                 ),
                 SizedBox(height: 26.h),
                 customElevatedButtonWidget(
-                  text: 'Back to Login',
+                  text: 'Refresh',
                   onTapped: () {
-                    context.pushRemoveUntil(LoginViews());
+                    context.pushRemoveUntil(HomeMainNavHolderView());
                   },
                 ),
               ],
