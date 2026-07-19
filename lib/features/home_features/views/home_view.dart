@@ -51,7 +51,7 @@ class _HomeViewState extends State<HomeView> {
     await context.read<HomeViewModel>().fetchHomeData();
   }
 
-  String getRatingLabel(double rating) {
+  String getRatingLabel(int rating) {
     if (rating >= 4.5) {
       return "Excellent";
     } else if (rating >= 3.5) {
@@ -196,15 +196,15 @@ class _HomeViewState extends State<HomeView> {
                                   color: Colors.white,
                                 ),
                               ),
-                              RatingBarIndicator(
-                                rating: responseModel.lacScore?.score ?? 0.0,
-                                itemBuilder: (context, index) =>
-                                    const Icon(Icons.star, color: Colors.amber),
-                                itemCount: 5,
-                                itemSize: 14.r,
-                                direction: Axis.horizontal,
-                              ),
 
+                              // RatingBarIndicator(
+                              //   rating: responseModel.lacScore?.score ?? 0.0,
+                              //   itemBuilder: (context, index) =>
+                              //       const Icon(Icons.star, color: Colors.amber),
+                              //   itemCount: 5,
+                              //   itemSize: 14.r,
+                              //   direction: Axis.horizontal,
+                              // ),
                               SizedBox(height: 4.h),
                               Text(
                                 getRatingLabel(
@@ -242,12 +242,12 @@ class _HomeViewState extends State<HomeView> {
                                   value:
                                       '${responseModel.lacScore?.punctuality ?? 0}%',
                                 ),
-                                MatricTileWidget(
-                                  icon: RemixIcons.user_3_line,
-                                  title: 'Performance',
-                                  value:
-                                      '${responseModel.lacScore?.performance ?? 0}/5',
-                                ),
+                                // MatricTileWidget(
+                                //   icon: RemixIcons.user_3_line,
+                                //   title: 'Performance',
+                                //   value:
+                                //       '${responseModel.lacScore?.performance ?? 0}/5',
+                                // ),
                               ],
                             ),
                           ),

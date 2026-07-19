@@ -6,10 +6,10 @@
 //   }
 
 class LacScoreResponseModel {
-  final double score;
-  final double reliability;
-  final double punctuality;
-  final double performance;
+  final int score;
+  final double? reliability;
+  final double? punctuality;
+  final double? performance;
 
   LacScoreResponseModel({
     required this.score,
