@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:staffing/app/constants/app_colors.dart';
+import 'package:staffing/app/utils/get_tier_icon.dart';
 
 class MyProfileInfoCardWidget extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
+  final String? image;
   const MyProfileInfoCardWidget({
     super.key,
     required this.icon,
     required this.title,
     required this.subtitle,
+    this.image,
   });
 
   @override
@@ -25,7 +28,10 @@ class MyProfileInfoCardWidget extends StatelessWidget {
             mainAxisAlignment: .center,
             spacing: 4.h,
             children: [
-              Icon(icon, size: 24.r),
+              if (image == null)
+                Icon(icon, size: 24.r)
+              else
+                Image.asset(getTierIcon(image ?? ''), height: 24.h),
               Text(
                 title,
                 style: TextStyle(fontSize: 16.sp, fontWeight: .w600),

@@ -10,6 +10,7 @@ import 'package:staffing/features/auth_features/view_models/login_view_model.dar
 import 'package:staffing/features/auth_features/views/login_views.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
+import 'package:staffing/features/home_features/view_models/home_view_model.dart';
 import 'package:staffing/features/my_profile_features/view_models/my_profile_view_model.dart';
 import 'package:staffing/features/my_profile_features/views/about_us_view.dart';
 import 'package:staffing/features/my_profile_features/views/document_and_certifications_view.dart';
@@ -29,7 +30,10 @@ class MyProfileView extends StatefulWidget {
 
 class _MyProfileViewState extends State<MyProfileView> {
   Future<void> _initialize() async {
-    await context.read<MyProfileViewModel>().fetchMyProfileContent();
+    await Future.wait([
+      context.read<MyProfileViewModel>().fetchMyProfileContent(),
+      context.read<HomeViewModel>().fetchHomeData(),
+    ]);
   }
 
   @override
@@ -233,35 +237,47 @@ class _MyProfileViewState extends State<MyProfileView> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                GridView.custom(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 1.5,
-                    crossAxisCount: 2,
+                Consumer<HomeViewModel>(
+                  builder: (context, provider, child) => GridView.custom(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 1.5,
+                      crossAxisCount: 2,
+                    ),
+                    childrenDelegate: SliverChildListDelegate([
+                      MyProfileInfoCardWidget(
+                        icon: RemixIcons.calendar_line,
+                        title:
+                            '${provider.homeDashboardResponseModel?.stats?.shiftsCompletedThisMonth ?? 0}',
+                        subtitle: 'Shift Completed This Month',
+                      ),
+                      MyProfileInfoCardWidget(
+                        icon: Icons.watch_later_outlined,
+                        title:
+                            '${provider.homeDashboardResponseModel?.stats?.totalHoursThisMonth ?? 0}',
+                        subtitle: 'Total Hours This Month',
+                      ),
+                      MyProfileInfoCardWidget(
+                        icon: Icons.attach_money_outlined,
+                        title:
+                            '\$${provider.homeDashboardResponseModel?.stats?.earningsThisMonth ?? 0}',
+                        subtitle: 'Earnings This Month',
+                      ),
+                      MyProfileInfoCardWidget(
+                        icon: Icons.star_border_outlined,
+                        image:
+                            provider
+                                .homeDashboardResponseModel
+                                ?.lacScore
+                                ?.tier ??
+                            '',
+                        title:
+                            '${provider.homeDashboardResponseModel?.lacScore?.score ?? 0}',
+                        subtitle: 'LAC score',
+                      ),
+                    ]),
                   ),
-                  childrenDelegate: SliverChildListDelegate([
-                    MyProfileInfoCardWidget(
-                      icon: RemixIcons.calendar_line,
-                      title: '25',
-                      subtitle: 'Shift Completed This Month',
-                    ),
-                    MyProfileInfoCardWidget(
-                      icon: Icons.watch_later_outlined,
-                      title: '120',
-                      subtitle: 'Total Hours This Month',
-                    ),
-                    MyProfileInfoCardWidget(
-                      icon: Icons.attach_money_outlined,
-                      title: '\$255.53',
-                      subtitle: 'Earnings This Month',
-                    ),
-                    MyProfileInfoCardWidget(
-                      icon: Icons.star_border_outlined,
-                      title: '4.9',
-                      subtitle: 'Overall rating',
-                    ),
-                  ]),
                 ),
                 SizedBox(height: 16.h),
                 Card(

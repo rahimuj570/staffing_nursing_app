@@ -7,4 +7,9 @@ class AppAssets {
   static const String nurseDp = 'assets/images/nurse_dp.png';
   static const String hospitalImage = 'assets/images/hospital_image.png';
   static const String demoMap = 'assets/images/demo_map.png';
+
+  static const String bronze = 'assets/images/bronze.png';
+  static const String silver = 'assets/images/silver.png';
+  static const String gold = 'assets/images/gold.png';
+  static const String diamond = 'assets/images/diamond.png';
 }

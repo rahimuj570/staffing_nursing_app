@@ -6,8 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/constants/url_list.dart';
+import 'package:staffing/app/extensions/capitalized.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/services/auth_prefs_service.dart';
+import 'package:staffing/app/utils/get_tier_icon.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
 import 'package:staffing/features/common_features/views/shift_details_view.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
@@ -158,8 +160,8 @@ class _HomeViewState extends State<HomeView> {
                       child: Row(
                         children: [
                           Container(
-                            width: 64,
-                            height: 64,
+                            width: 64.w,
+                            height: 64.h,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
@@ -167,11 +169,11 @@ class _HomeViewState extends State<HomeView> {
                                 width: 2,
                               ),
                             ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                                size: 40,
+                            child: Center(
+                              child: Image.asset(
+                                getTierIcon(responseModel.lacScore?.tier ?? ""),
+                                width: 64.w,
+                                fit: .cover,
                               ),
                             ),
                           ),
@@ -207,9 +209,7 @@ class _HomeViewState extends State<HomeView> {
                               // ),
                               SizedBox(height: 4.h),
                               Text(
-                                getRatingLabel(
-                                  responseModel.lacScore?.score ?? 0,
-                                ),
+                                '${responseModel.lacScore?.tier}'.capitalize(),
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   fontWeight: .w600,
