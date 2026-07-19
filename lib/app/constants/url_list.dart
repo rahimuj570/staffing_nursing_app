@@ -37,4 +37,6 @@ class UrlList {
   static const String profileUpdate = '/api/v1/nurses/me/profile/update/';
 
   static const String fcmToken = '/api/v1/notifications/fcm-device/';
+  static const String notifications = '/api/v1/notifications/';
+  static String readNotification(int id) => '/api/v1/notifications/$id/read/';
 }
