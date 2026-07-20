@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 
 class ShiftCardWidget extends StatelessWidget {
@@ -47,7 +48,15 @@ class ShiftCardWidget extends StatelessWidget {
                   loadingBuilder: (context, child, loadingProgress) =>
                       loadingProgress == null
                       ? child
-                      : Center(child: CircularProgressIndicator()),
+                      : Shimmer.fromColors(
+                          baseColor: AppColors.greyColor,
+                          highlightColor: Colors.white,
+                          child: Container(
+                            color: AppColors.greyColor,
+                            width: 120.0,
+                            height: 120.0,
+                          ),
+                        ),
                 ),
               ),
             ),

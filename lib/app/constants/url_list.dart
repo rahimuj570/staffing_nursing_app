@@ -34,9 +34,11 @@ class UrlList {
       '/api/v1/shifts/assignments/$id/cancel/';
 
   static const String settings = '/api/v1/settings/';
+  static const String leaderBoard = '/api/v1/rewards/leaderboard/';
   static const String profileUpdate = '/api/v1/nurses/me/profile/update/';
 
   static const String fcmToken = '/api/v1/notifications/fcm-device/';
   static const String notifications = '/api/v1/notifications/';
+
   static String readNotification(int id) => '/api/v1/notifications/$id/read/';
 }

@@ -35,7 +35,16 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Image.asset(AppAssets.logo, width: 192.w)),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: .center,
+          children: [
+            Image.asset(AppAssets.logo, width: 192.w),
+            SizedBox(height: 20.h),
+            SizedBox(width: 80.w, child: LinearProgressIndicator()),
+          ],
+        ),
+      ),
     );
   }
 }

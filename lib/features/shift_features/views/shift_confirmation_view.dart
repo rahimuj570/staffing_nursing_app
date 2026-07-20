@@ -94,7 +94,9 @@ class ShiftConfirmationView extends StatelessWidget {
                               hideDivider: true,
                               icon: RemixIcons.map_pin_2_line,
                               title: 'Distance',
-                              subtitle: '${response.distanceKm} KM Away',
+                              subtitle: response.distanceKm == null
+                                  ? 'N/A'
+                                  : '${response.distanceKm} KM Away',
                             ),
                           ]),
                         ),

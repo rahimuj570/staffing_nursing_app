@@ -13,6 +13,7 @@ import 'package:staffing/app/utils/get_current_lat_lang_util.dart';
 import 'package:staffing/app/utils/get_duration_from_date_range.dart';
 import 'package:staffing/app/utils/get_week_day_name.dart';
 import 'package:staffing/app/utils/show_status_snackbar_util.dart';
+import 'package:staffing/features/common_features/widgets/confirm_dialog_widget.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/common_features/widgets/read_more_text_widget.dart';
 import 'package:staffing/features/message_features/views/chat_view.dart';
@@ -412,7 +413,7 @@ class _ShiftDetailsViewState extends State<ShiftDetailsView> {
                                           SizedBox(width: 4.w),
                                           Expanded(
                                             child: Text(
-                                              '${shiftDetailResponse.distanceKm}',
+                                              '${shiftDetailResponse.distanceKm ?? 'N/A'}',
                                             ),
                                           ),
                                         ],
@@ -502,9 +503,20 @@ class _ShiftDetailsViewState extends State<ShiftDetailsView> {
                                           pos: positioned,
                                         );
                                       } else {
-                                        await provider.changeClockOut(
-                                          id: widget.assignmentId!,
-                                          pos: positioned,
+                                        showDialog(
+                                          context: context,
+                                          builder: (context2) =>
+                                              ConfirmDialogWidget(
+                                                title: 'Confirm Clock Out',
+                                                message:
+                                                    'Are you sure you want to clock out?',
+                                                onConfirm: () async {
+                                                  await provider.changeClockOut(
+                                                    id: widget.assignmentId!,
+                                                    pos: positioned,
+                                                  );
+                                                },
+                                              ),
                                         );
                                       }
                                     } catch (e) {
@@ -530,25 +542,36 @@ class _ShiftDetailsViewState extends State<ShiftDetailsView> {
                                     borderColor: AppColors.themeColor,
                                     text: 'Cancel The Shift',
                                     onTapped: () async {
-                                      NetworkResponseModel responseModel =
-                                          await provider.cancelSchedule(
-                                            id: widget.assignmentId!,
-                                          );
-                                      if (responseModel.isSuccess) {
-                                        showStatusSnackbar(
-                                          context,
+                                      await showDialog(
+                                        context: context,
+                                        builder: (context2) => ConfirmDialogWidget(
+                                          title: 'Cancel Shift',
                                           message:
-                                              "Successfully cancelled the shift",
-                                          type: .success,
-                                        );
-                                        context.pop();
-                                      } else {
-                                        showStatusSnackbar(
-                                          context,
-                                          message: "Failed to cancel the shift",
-                                          type: .error,
-                                        );
-                                      }
+                                              'Are you sure you want to cancel the shift?',
+                                          onConfirm: () async {
+                                            NetworkResponseModel responseModel =
+                                                await provider.cancelSchedule(
+                                                  id: widget.assignmentId!,
+                                                );
+                                            if (responseModel.isSuccess) {
+                                              showStatusSnackbar(
+                                                context,
+                                                message:
+                                                    "Successfully cancelled the shift",
+                                                type: .success,
+                                              );
+                                              context.pop();
+                                            } else {
+                                              showStatusSnackbar(
+                                                context,
+                                                message:
+                                                    "Failed to cancel the shift",
+                                                type: .error,
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      );
                                     },
                                   ),
                                 ),

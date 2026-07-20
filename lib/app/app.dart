@@ -7,11 +7,12 @@ import 'package:staffing/app/app_theme.dart';
 import 'package:staffing/app/services/auth_logout_event_bus.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
 import 'package:staffing/features/auth_features/views/login_views.dart';
-import 'package:staffing/features/common_features/models/view_models/notification_view_model.dart';
+import 'package:staffing/features/common_features/view_models/notification_view_model.dart';
 import 'package:staffing/features/forgot_password_features/view_models/forgot_password_view_model.dart';
 import 'package:staffing/features/home_features/view_models/home_view_model.dart';
 import 'package:staffing/features/home_main_nav_holder_features/view_models/main_home_nav_holder_view_model.dart';
 import 'package:staffing/features/my_profile_features/view_models/document_view_model.dart';
+import 'package:staffing/features/my_profile_features/view_models/leader_board_view_model.dart';
 import 'package:staffing/features/my_profile_features/view_models/my_profile_view_model.dart';
 import 'package:staffing/features/register_features/view_models/register_user_view_model.dart';
 import 'package:staffing/features/register_features/view_models/register_view_model.dart';
@@ -64,6 +65,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
         ChangeNotifierProvider(create: (_) => MyProfileViewModel()),
         ChangeNotifierProvider(create: (_) => DocumentViewModel()),
         ChangeNotifierProvider(create: (_) => NotificationViewModel()),
+        ChangeNotifierProvider(create: (_) => LeaderBoardViewModel()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(402, 874),

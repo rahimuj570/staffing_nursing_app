@@ -5,7 +5,7 @@ import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/utils/time_ago_Label_util.dart';
 import 'package:staffing/features/common_features/models/notification_response_model.dart';
-import 'package:staffing/features/common_features/models/view_models/notification_view_model.dart';
+import 'package:staffing/features/common_features/view_models/notification_view_model.dart';
 
 class NotificationView extends StatefulWidget {
   const NotificationView({super.key});

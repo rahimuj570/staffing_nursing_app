@@ -14,6 +14,7 @@ import 'package:staffing/features/home_features/view_models/home_view_model.dart
 import 'package:staffing/features/my_profile_features/view_models/my_profile_view_model.dart';
 import 'package:staffing/features/my_profile_features/views/about_us_view.dart';
 import 'package:staffing/features/my_profile_features/views/document_and_certifications_view.dart';
+import 'package:staffing/features/my_profile_features/views/leader_board_view.dart';
 import 'package:staffing/features/my_profile_features/views/live_support_view.dart';
 import 'package:staffing/features/my_profile_features/views/privacy_policy_view.dart';
 import 'package:staffing/features/my_profile_features/views/profile_information_view.dart';
@@ -307,6 +308,17 @@ class _MyProfileViewState extends State<MyProfileView> {
                           title: 'Documents & Certifications',
                           onTap: () {
                             context.push(DocumentAndCertificationsView());
+                          },
+                        ),
+                        Padding(
+                          padding: .only(top: 4.0.h, bottom: 8.h),
+                          child: Divider(color: AppColors.greyLight),
+                        ),
+                        MytProfileMenuWidget(
+                          icon: RemixIcons.stairs_line,
+                          title: 'Leader Board',
+                          onTap: () {
+                            context.push(LeaderBoardView());
                           },
                         ),
                         Padding(

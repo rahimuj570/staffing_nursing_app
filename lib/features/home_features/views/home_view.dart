@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -7,11 +6,9 @@ import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/extensions/capitalized.dart';
-import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/services/auth_prefs_service.dart';
 import 'package:staffing/app/utils/get_tier_icon.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
-import 'package:staffing/features/common_features/views/shift_details_view.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
 import 'package:staffing/features/home_features/models/home_dashboard_response_model.dart';
 import 'package:staffing/features/home_features/models/home_upcoming_shift_response_model.dart';
@@ -33,6 +30,8 @@ class _HomeViewState extends State<HomeView> {
     final hour = DateTime.now().hour;
     if (hour < 12) {
       return "Good Morning";
+    } else if (hour < 13) {
+      return "Good Noon"; // noon is also known as good noon
     } else if (hour < 17) {
       return "Good Afternoon";
     } else {
@@ -51,18 +50,6 @@ class _HomeViewState extends State<HomeView> {
 
   Future<void> _initialize() async {
     await context.read<HomeViewModel>().fetchHomeData();
-  }
-
-  String getRatingLabel(int rating) {
-    if (rating >= 4.5) {
-      return "Excellent";
-    } else if (rating >= 3.5) {
-      return "Good";
-    } else if (rating >= 2.5) {
-      return "Average";
-    } else {
-      return "Poor";
-    }
   }
 
   @override
@@ -286,9 +273,22 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     SizedBox(height: 8.h),
                     if (responseModel.upcomingShifts?.isEmpty ?? false)
-                      Text(
-                        'No Upcoming Shifts',
-                        style: TextStyle(fontSize: 14.sp, fontWeight: .w500),
+                      Container(
+                        width: .maxFinite,
+                        padding: .all(12.r),
+                        decoration: BoxDecoration(
+                          color: AppColors.greyLight,
+                          borderRadius: .circular(8.r),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'No Upcoming Shifts',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: .w500,
+                            ),
+                          ),
+                        ),
                       )
                     else
                       ListView.separated(
@@ -338,17 +338,16 @@ class _HomeViewState extends State<HomeView> {
                               '\$${responseModel.stats?.earningsThisWeek ?? 0}',
                           subtitle: 'Earnings This Week',
                         ),
-                        // AtGlanceCardWidget(
-                        //   title:
-                        //       '${responseModel.stats?.documentsExpiringSoon ?? 0}',
-                        //   subtitle: 'Documents Expiring Soon',
-                        // ),
-                        // AtGlanceCardWidget(
-                        //   title: 'Compliant',
-                        //   subtitle: responseModel.stats?.isCompliant ?? false
-                        //       ? 'All Requirements Up to Date'
-                        //       : 'All Requirements Not Up to Date',
-                        // ),
+                        AtGlanceCardWidget(
+                          title:
+                              '${responseModel.stats?.shiftsCompletedThisMonth ?? 0}',
+                          subtitle: 'Shifts Completed This Month',
+                        ),
+                        AtGlanceCardWidget(
+                          title:
+                              '${responseModel.stats?.totalHoursThisMonth ?? 0}',
+                          subtitle: 'Total Hours This Month',
+                        ),
                       ]),
                     ),
                     SizedBox(height: 20.h),
