@@ -7,6 +7,7 @@ import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/network/network_response_model.dart';
+import 'package:staffing/app/services/network_service.dart';
 import 'package:staffing/app/utils/format_date_util.dart';
 import 'package:staffing/app/utils/format_time_util.dart';
 import 'package:staffing/app/utils/get_current_lat_lang_util.dart';
@@ -45,6 +46,7 @@ class ShiftDetailsView extends StatefulWidget {
 class _ShiftDetailsViewState extends State<ShiftDetailsView> {
   @override
   void initState() {
+    NetworkService.instance.onRetry = _initialized;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _initialized();
     });

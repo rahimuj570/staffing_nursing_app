@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/capitalized.dart';
+import 'package:staffing/app/services/network_service.dart';
 import 'package:staffing/features/my_profile_features/view_models/leader_board_view_model.dart';
 
 class LeaderBoardView extends StatefulWidget {
@@ -15,6 +16,7 @@ class LeaderBoardView extends StatefulWidget {
 class _LeaderBoardViewState extends State<LeaderBoardView> {
   @override
   void initState() {
+    NetworkService.instance.onRetry = _initializer;
     // TODO: implement initState
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       _initializer();
@@ -22,7 +24,7 @@ class _LeaderBoardViewState extends State<LeaderBoardView> {
     super.initState();
   }
 
-  void _initializer() async {
+  Future<void> _initializer() async {
     context.read<LeaderBoardViewModel>().fetchLeaderBoardData();
   }
 

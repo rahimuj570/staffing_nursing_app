@@ -6,6 +6,7 @@ import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/services/auth_prefs_service.dart';
+import 'package:staffing/app/services/network_service.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
 import 'package:staffing/features/auth_features/views/login_views.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
@@ -39,6 +40,7 @@ class _MyProfileViewState extends State<MyProfileView> {
 
   @override
   void initState() {
+    NetworkService.instance.onRetry = _initialize;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _initialize();
     });

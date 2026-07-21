@@ -1,5 +1,5 @@
 class UrlList {
-  static const String baseUrl = 'https://17d7-162-4-34-65.ngrok-free.app';
+  static const String baseUrl = 'http://10.10.29.50:8086';
 
   static const String registerUser = '/api/v1/auth/register/';
   static const String registerUserOtp = '/api/v1/auth/verify-otp/';

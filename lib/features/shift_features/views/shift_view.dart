@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/services/network_service.dart';
 import 'package:staffing/app/utils/format_date_util.dart';
 import 'package:staffing/app/utils/format_time_util.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
@@ -35,6 +36,7 @@ class _ShiftViewState extends State<ShiftView> {
 
   @override
   void initState() {
+    NetworkService.instance.onRetry = _initialized;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _initialized();
     });

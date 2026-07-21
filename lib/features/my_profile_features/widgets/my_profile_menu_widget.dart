@@ -35,10 +35,7 @@ class MytProfileMenuWidget extends StatelessWidget {
             style: TextStyle(fontSize: 16.sp, fontWeight: .w500),
           ),
           Spacer(),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.arrow_forward_ios_rounded, size: 20.r),
-          ),
+          Icon(Icons.arrow_forward_ios_rounded, size: 20.r),
         ],
       ),
     );

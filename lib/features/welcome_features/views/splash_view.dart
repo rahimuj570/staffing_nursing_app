@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/extensions/route.dart';
 import 'package:staffing/app/services/auth_prefs_service.dart';
+import 'package:staffing/app/services/network_service.dart';
+import 'package:staffing/features/common_features/views/no_internet_view.dart';
 import 'package:staffing/features/home_main_nav_holder_features/views/home_main_nav_holder_view.dart';
 import 'package:staffing/features/welcome_features/views/get_started_view.dart';
 
@@ -14,26 +16,41 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+  bool _showNoInternet = false;
+
   @override
   void initState() {
     // TODO: implement initState
-    Future.delayed(const Duration(seconds: 3), () async {
-      AuthPrefsService().getToken().then(
-        (token) => token == null
-            ? null
-            : context.pushReplacement(const HomeMainNavHolderView()),
-      );
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const GetStartedView()),
-      );
+    _startApp();
+    NetworkService.instance.connectionStream.listen((event) async {
+      if (mounted) {
+        setState(() {
+          _showNoInternet = event == false;
+        });
+      }
+      if (_showNoInternet == false) {
+        final token = await AuthPrefsService().getToken();
+
+        if (!mounted) return;
+
+        if (token != null) {
+          if (mounted) context.pushReplacement(const HomeMainNavHolderView());
+        } else {
+          if (mounted) context.pushReplacement(const GetStartedView());
+        }
+      }
     });
 
     super.initState();
   }
 
+  Future<void> _startApp() async {
+    await Future.delayed(const Duration(seconds: 3));
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_showNoInternet) return NoInternetView(onRetry: _startApp);
     return Scaffold(
       body: Center(
         child: Column(

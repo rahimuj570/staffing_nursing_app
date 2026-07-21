@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/services/network_service.dart';
 import 'package:staffing/app/utils/format_date_util.dart';
 import 'package:staffing/app/utils/format_time_util.dart';
 import 'package:staffing/features/common_features/views/shift_details_view.dart';
@@ -26,6 +27,7 @@ class _ScheduleViewState extends State<ScheduleView>
   @override
   void initState() {
     super.initState();
+    NetworkService.instance.onRetry = _initialize;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       context.read<ScheduleViewModel>().changeTabIndex(0);
       await _initialize();

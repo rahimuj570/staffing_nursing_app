@@ -22,7 +22,8 @@ class FilterShiftView extends StatefulWidget {
   State<FilterShiftView> createState() => _FilterShiftViewState();
 }
 
-class _FilterShiftViewState extends State<FilterShiftView> {
+class _FilterShiftViewState extends State<FilterShiftView>
+    with WidgetsBindingObserver {
   String shiftType = '';
   String profession = '';
   String minRange = '';
@@ -57,22 +58,29 @@ class _FilterShiftViewState extends State<FilterShiftView> {
 
     // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      showStatusSnackbar(context, message: 'Location services are disabled.');
-      throw Exception('Location services are disabled.');
-    }
 
-    // Check permission
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+    if (!serviceEnabled) {
+      showStatusSnackbar(
+        context,
+        message:
+            'Location services are disabled. Please enable location services in your device settings.',
+        type: .error,
+      );
+      throw Exception('Location services are disabled.');
+    } else {
+      permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        showStatusSnackbar(
-          context,
-          message: 'Location permissions are denied.',
-        );
-        throw Exception('Location permissions are denied.');
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          showStatusSnackbar(
+            context,
+            message: 'Location permissions are denied.',
+          );
+          throw Exception('Location permissions are denied.');
+        }
       }
+
+      // Check permission
     }
 
     if (permission == LocationPermission.deniedForever) {
@@ -130,9 +138,46 @@ class _FilterShiftViewState extends State<FilterShiftView> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _locationTEC.dispose();
     // TODO: implement dispose
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      final enabled = await Geolocator.isLocationServiceEnabled();
+
+      if (!enabled) return;
+
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) => const Center(child: CircularProgressIndicator()),
+      );
+
+      try {
+        final position = await _determinePosition();
+
+        lat = position.latitude;
+        lng = position.longitude;
+
+        await getAddressFromLatLng(lat!, lng!);
+
+        setState(() {});
+      } catch (_) {
+      } finally {
+        Navigator.pop(context);
+      }
+    }
   }
 
   @override
@@ -155,19 +200,52 @@ class _FilterShiftViewState extends State<FilterShiftView> {
                 isChangedAddress = true;
                 return;
               },
-              onSuffixTap: () {
-                showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (context) =>
-                      Center(child: CircularProgressIndicator()),
-                );
-                _determinePosition().then((value) {
-                  lat = value.latitude;
-                  lng = value.longitude;
-                  getAddressFromLatLng(lat!, lng!);
-                  Navigator.pop(context);
-                });
+              onSuffixTap: () async {
+                if (await Geolocator.isLocationServiceEnabled() == false) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Location services are disabled'),
+                      content: const Text(
+                        'Please enable location services in your device settings.',
+                      ),
+                      actions: [
+                        TextButton(
+                          child: const Text('Cancel'),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        TextButton(
+                          child: const Text('Settings'),
+                          onPressed: () {
+                            Geolocator.openLocationSettings();
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (_) =>
+                        const Center(child: CircularProgressIndicator()),
+                  );
+                  try {
+                    final position = await _determinePosition();
+
+                    lat = position.latitude;
+                    lng = position.longitude;
+
+                    await getAddressFromLatLng(lat!, lng!);
+                  } catch (_) {
+                    // Ignore or show a message if needed.
+                  } finally {
+                    if (mounted && Navigator.canPop(context)) {
+                      Navigator.pop(context);
+                    }
+                  }
+                }
               },
             ),
             if (isAddressFetching) SizedBox(height: 8.h),
