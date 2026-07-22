@@ -257,6 +257,7 @@ class _FilterShiftViewState extends State<FilterShiftView>
                   child: InkWell(
                     onTap: () {
                       showDialog(
+                        barrierDismissible: false,
                         context: context,
                         builder: (context) => Dialog(
                           shape: RoundedRectangleBorder(
