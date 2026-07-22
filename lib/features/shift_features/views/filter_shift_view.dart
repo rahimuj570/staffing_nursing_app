@@ -263,68 +263,98 @@ class _FilterShiftViewState extends State<FilterShiftView>
                             borderRadius: BorderRadius.circular(16.r),
                           ),
                           // FIX: SingleChildScrollView allows the Dialog to shrinkwrap exactly to the calendar height
-                          child: SingleChildScrollView(
-                            child: StatefulBuilder(
-                              builder: (context, dialogSetState) => TableCalendar(
-                                firstDay: DateTime.utc(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day,
-                                ),
-                                lastDay: DateTime.utc(2030, 12, 31),
-                                focusedDay: _focusedDay,
-                                selectedDayPredicate: (day) =>
-                                    isSameDay(_selectedDay, day),
-                                rangeStartDay: _rangeStart,
-                                rangeEndDay: _rangeEnd,
-                                rangeSelectionMode: _rangeSelectionMode,
-                                onDaySelected: (selectedDay, focusedDay) {
-                                  // Sync state to dialog layout
-                                  dialogSetState(() {
-                                    _selectedDay = selectedDay;
-                                    _focusedDay = focusedDay;
-                                  });
-                                  // Sync state back to outer screen view layout
-                                  setState(() {});
-                                },
-                                onRangeSelected: (start, end, focusedDay) {
-                                  dialogSetState(() {
-                                    _rangeStart = start;
-                                    _rangeEnd = end;
-                                    _focusedDay = focusedDay;
-                                  });
-                                  setState(() {});
-                                },
-                                headerStyle: const HeaderStyle(
-                                  formatButtonVisible: false,
-                                  titleCentered: true,
-                                  leftChevronIcon: Icon(Icons.chevron_left),
-                                  rightChevronIcon: Icon(Icons.chevron_right),
-                                ),
-                                calendarStyle: CalendarStyle(
-                                  rangeHighlightColor: AppColors.themeColor
-                                      .withValues(alpha: 0.15),
-                                  rangeStartDecoration: BoxDecoration(
-                                    color: AppColors.themeColor,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  rangeEndDecoration: BoxDecoration(
-                                    color: AppColors.themeColor,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  todayDecoration: BoxDecoration(
-                                    color: AppColors.themeColor.withValues(
-                                      alpha: 0.3,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              StatefulBuilder(
+                                builder: (context, dialogSetState) =>
+                                    TableCalendar(
+                                      firstDay: DateTime.utc(
+                                        DateTime.now().year,
+                                        DateTime.now().month,
+                                        DateTime.now().day,
+                                      ),
+                                      lastDay: DateTime.utc(2099, 12, 31),
+                                      focusedDay: _focusedDay,
+                                      selectedDayPredicate: (day) =>
+                                          isSameDay(_selectedDay, day),
+                                      rangeStartDay: _rangeStart,
+                                      rangeEndDay: _rangeEnd,
+                                      rangeSelectionMode: _rangeSelectionMode,
+                                      onDaySelected: (selectedDay, focusedDay) {
+                                        dialogSetState(() {
+                                          _selectedDay = selectedDay;
+                                          _focusedDay = focusedDay;
+                                        });
+                                        setState(() {});
+                                      },
+                                      onRangeSelected:
+                                          (start, end, focusedDay) {
+                                            dialogSetState(() {
+                                              _rangeStart = start;
+                                              _rangeEnd = end;
+                                              _focusedDay = focusedDay;
+                                            });
+                                            setState(() {});
+                                          },
+                                      headerStyle: const HeaderStyle(
+                                        formatButtonVisible: false,
+                                        titleCentered: true,
+                                        leftChevronIcon: Icon(
+                                          Icons.chevron_left,
+                                        ),
+                                        rightChevronIcon: Icon(
+                                          Icons.chevron_right,
+                                        ),
+                                      ),
+                                      calendarStyle: CalendarStyle(
+                                        rangeHighlightColor: AppColors
+                                            .themeColor
+                                            .withValues(alpha: 0.15),
+                                        rangeStartDecoration: BoxDecoration(
+                                          color: AppColors.themeColor,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        rangeEndDecoration: BoxDecoration(
+                                          color: AppColors.themeColor,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        todayDecoration: BoxDecoration(
+                                          color: AppColors.themeColor
+                                              .withValues(alpha: 0.3),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        selectedDecoration: BoxDecoration(
+                                          color: AppColors.themeColor,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
                                     ),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  selectedDecoration: BoxDecoration(
-                                    color: AppColors.themeColor,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
                               ),
-                            ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _selectedDay = null;
+                                        _rangeStart = null;
+                                        _rangeEnd = null;
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Reset'),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Done'),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       );
