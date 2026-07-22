@@ -8,6 +8,7 @@ import 'package:staffing/app/constants/url_list.dart';
 import 'package:staffing/app/extensions/capitalized.dart';
 import 'package:staffing/app/services/auth_prefs_service.dart';
 import 'package:staffing/app/services/network_service.dart';
+import 'package:staffing/app/services/notification_service.dart';
 import 'package:staffing/app/utils/get_tier_icon.dart';
 import 'package:staffing/features/auth_features/view_models/login_view_model.dart';
 import 'package:staffing/features/common_features/widgets/custom_app_bar_widget.dart';
@@ -45,6 +46,9 @@ class _HomeViewState extends State<HomeView> {
     NetworkService.instance.onRetry = () async => await _initialize();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _initialize();
+      NotificationService.instance.sendToken(
+        await NotificationService.instance.getToken(),
+      );
     });
 
     super.initState();

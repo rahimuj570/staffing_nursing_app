@@ -29,6 +29,13 @@ class _FilterShiftViewState extends State<FilterShiftView>
   String minRange = '';
   bool isAddressFetching = false;
 
+  ////JUST FOR UI
+  ///
+  String selectedPayRange = '\$0+/hr';
+
+  ///
+  ////////
+
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   final RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOn;
@@ -338,7 +345,7 @@ class _FilterShiftViewState extends State<FilterShiftView>
                                   TextButton(
                                     onPressed: () {
                                       setState(() {
-                                        _selectedDay = null;
+                                        // _selectedDay = null;
                                         _rangeStart = null;
                                         _rangeEnd = null;
                                       });
@@ -427,7 +434,7 @@ class _FilterShiftViewState extends State<FilterShiftView>
                 Expanded(
                   child: CustomDropdownFieldWidget(
                     label: 'Pay Range',
-                    value: minRange.isEmpty ? '\$0+/hr' : minRange,
+                    value: selectedPayRange,
                     items: [
                       '\$0+/hr',
                       '\$20+/hr',
@@ -440,10 +447,8 @@ class _FilterShiftViewState extends State<FilterShiftView>
                       '\$100+/hr',
                     ],
                     onChanged: (value) {
-                      minRange = value!;
-                      //need to extract only number 20, 300 from this string "\$20+/hr, \$300+/hr"
-                      minRange = minRange.substring(1);
-                      minRange = minRange.substring(0, minRange.indexOf('+'));
+                      selectedPayRange = value!;
+                      minRange = value.replaceAll('\$', '').split('+').first;
                       print("minRange: $minRange");
                     },
                   ),
