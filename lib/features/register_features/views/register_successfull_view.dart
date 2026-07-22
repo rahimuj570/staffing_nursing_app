@@ -3,11 +3,29 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:staffing/app/constants/app_assets.dart';
 import 'package:staffing/app/constants/app_colors.dart';
 import 'package:staffing/app/extensions/route.dart';
+import 'package:staffing/app/services/notification_service.dart';
 import 'package:staffing/features/common_features/widgets/custom_elevated_button_widget.dart';
 import 'package:staffing/features/home_main_nav_holder_features/views/home_main_nav_holder_view.dart';
 
-class RegisterSuccessfullView extends StatelessWidget {
+class RegisterSuccessfullView extends StatefulWidget {
   const RegisterSuccessfullView({super.key});
+
+  @override
+  State<RegisterSuccessfullView> createState() =>
+      _RegisterSuccessfullViewState();
+}
+
+class _RegisterSuccessfullViewState extends State<RegisterSuccessfullView> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      NotificationService.instance.sendToken(
+        await NotificationService.instance.getToken(),
+      );
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
